@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>導入事例インタビュー記事ができるまで</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --paper: #ffffff;
+      --white: #ffffff;
+      --ink: #454545;
+      --muted: #6b6b6b;
+      --line: #c8c8c8;
+      --accent: #f43e43;
+      --accent-dark: #d83237;
+      --accent-soft: rgba(244, 62, 67, 0.10);
+      --navy: #454545;
+      --navy-soft: #f2f2f2;
+      --green: #454545;
+      --green-soft: #f7f7f7;
+      --shadow: 0 20px 60px rgba(69, 69, 69, 0.12);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", sans-serif;
+      background: #ffffff;
+      color: var(--ink);
+      line-height: 1.85;
+    }
+
+    a { color: inherit; }
+
+    .hero {
+      min-height: 62vh;
+      display: grid;
+      align-items: center;
+      padding: 64px 24px 36px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -160px;
+      top: 80px;
+      border-radius: 50%;
+      background: rgba(39, 54, 74, 0.08);
+      filter: blur(2px);
+      z-index: 0;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max);
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--accent-dark);
+      background: rgba(255, 255, 255, 0.7);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      margin: 24px 0 20px;
+      font-size: clamp(36px, 5.2vw, 70px);
+      line-height: 1.12;
+      letter-spacing: -0.06em;
+    }
+
+    .lead {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: clamp(16px, 1.6vw, 19px);
+      margin: 0 0 28px;
+    }
+
+    .hero-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .hero-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      box-shadow: var(--shadow);
+      transform: rotate(1deg);
+    }
+
+    .hero-card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+
+    .progress-mini {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-step {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    .mini-num {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-weight: 900;
+    }
+
+    .mini-step strong {
+      display: block;
+      line-height: 1.45;
+      margin-bottom: 2px;
+    }
+
+    .mini-step span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px 96px;
+    }
+
+    .intro {
+      margin: 20px 0 56px;
+      padding: 34px;
+      background: #454545;
+      color: #fff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .intro h2 {
+      margin: 0;
+      font-size: clamp(26px, 3.3vw, 42px);
+      line-height: 1.25;
+      letter-spacing: -0.04em;
+    }
+
+    .intro p {
+      color: rgba(255,255,255,.78);
+      margin: 0;
+    }
+
+    .section {
+      margin: 68px 0;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .section-kicker {
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.22;
+      letter-spacing: -0.05em;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 22px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 31px;
+      top: 22px;
+      bottom: 22px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--line));
+    }
+
+    .step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .step-num {
+      position: relative;
+      z-index: 1;
+      width: 64px;
+      height: 64px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 900;
+      box-shadow: 0 10px 28px rgba(156, 78, 51, .26);
+    }
+
+    .step-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: 0 14px 36px rgba(56, 44, 30, 0.08);
+    }
+
+    .step-card h3 {
+      margin: 0 0 12px;
+      font-size: clamp(21px, 2.4vw, 30px);
+      line-height: 1.35;
+      letter-spacing: -0.03em;
+    }
+
+    .step-card p {
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .info-box {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--navy);
+      line-height: 1.5;
+    }
+
+    .info-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .quote-card {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      background: #fff;
+      border-left: 5px solid var(--accent);
+      color: #454545;
+      font-weight: 700;
+    }
+
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .ba-card {
+      border-radius: var(--radius-md);
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .ba-card.bad { background: rgba(244, 62, 67, 0.08); }
+    .ba-card.good { background: var(--green-soft); }
+
+    .ba-label {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .bad .ba-label { background: rgba(244, 62, 67, 0.16); color: #f43e43; }
+    .good .ba-label { background: #eeeeee; color: #454545; }
+
+    .ba-card p {
+      margin: 0;
+      color: #454545;
+      font-weight: 700;
+    }
+
+    .check-flow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .check-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+
+    .check-card .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--navy-soft);
+      color: var(--navy);
+      font-weight: 900;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .check-card strong {
+      display: block;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+
+    .check-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .summary {
+      margin-top: 72px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary h2 {
+      margin: 0 0 22px;
+      font-size: clamp(26px, 3.4vw, 42px);
+      line-height: 1.25;
+      letter-spacing: -0.04em;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .summary-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      background: var(--paper);
+    }
+
+    .summary-item strong {
+      color: var(--accent-dark);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .summary-item span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .closing {
+      margin-top: 28px;
+      padding: 26px;
+      border-radius: var(--radius-md);
+      background: #454545;
+      color: #fff;
+    }
+
+    .closing p {
+      color: rgba(255,255,255,.8);
+      margin: 0;
+    }
+
+    @media (max-width: 980px) {
+      .hero-inner,
+      .intro,
+      .section-head {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 56px 24px 40px;
+      }
+
+      .hero-card {
+        transform: none;
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 760px) {
+      main {
+        padding-inline: 18px;
+        padding-bottom: 72px;
+      }
+
+      .hero {
+        padding-inline: 18px;
+      }
+
+      .intro,
+      .summary,
+      .step-card {
+        padding: 24px;
+      }
+
+      .timeline::before {
+        left: 22px;
+      }
+
+      .step {
+        grid-template-columns: 46px 1fr;
+        gap: 14px;
+      }
+
+      .step-num {
+        width: 46px;
+        height: 46px;
+        font-size: 14px;
+      }
+
+      .info-grid,
+      .before-after,
+      .check-flow,
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        margin: 56px 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        line-height: 1.75;
+      }
+
+      .hero {
+        padding-top: 42px;
+        padding-bottom: 32px;
+      }
+
+      .hero-card,
+      .intro,
+      .summary,
+      .step-card {
+        border-radius: 22px;
+      }
+
+      .hero-points {
+        display: grid;
+      }
+
+      .pill {
+        justify-content: center;
+      }
+
+      .section-head {
+        gap: 12px;
+      }
+
+      .mini-step {
+        grid-template-columns: 1fr;
+      }
+
+      .mini-num {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="eyebrow">導入事例インタビュー制作の流れ</span>
+        <h1>準備で、インタビューの半分は決まります。</h1>
+        <p class="lead">
+          導入事例記事は、当日いきなり話を聞いて作るものではありません。貴社が把握している顧客情報を整理し、不足している事実を確認し、営業で使いやすい記事へと整えていきます。
+        </p>
+        <div class="hero-points">
+          <span class="pill">営業用の導入事例に特化</span>
+          <span class="pill">事前準備を重視</span>
+          <span class="pill">取材先確認まで対応</span>
+        </div>
+      </div>
+
+      <aside class="hero-card" aria-label="制作フローの概要">
+        <div class="hero-card-title">
+          <span>完成までの大きな流れ</span>
+          <span class="pill">9 steps</span>
+        </div>
+        <div class="progress-mini">
+          <div class="mini-step">
+            <div class="mini-num">1</div>
+            <div><strong>顧客情報を整理</strong><span>貴社が把握している導入背景を確認します。</span></div>
+          </div>
+          <div class="mini-step">
+            <div class="mini-num">2</div>
+            <div><strong>不足情報を設計</strong><span>インタビューで聞くべきことを明確にします。</span></div>
+          </div>
+          <div class="mini-step">
+            <div class="mini-num">3</div>
+            <div><strong>取材・原稿化・確認</strong><span>お客様の言葉を、営業で使える記事に整えます。</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>導入事例は、偶然いい話が出るのを待つ記事ではありません。</h2>
+      <p>
+        導入前の課題、選定理由、導入後の変化。これらを事前に整理しておくことで、インタビュー当日は確認すべき事実と、引き出すべき言葉に集中できます。だからこそ、準備が記事の品質を大きく左右します。
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Experience Flow</div>
+          <h2>導入事例インタビュー記事ができるまで</h2>
+        </div>
+        <p class="section-desc">
+          クライアント側、取材先、制作側の不安を減らしながら、営業で活用しやすい導入事例記事へ仕上げる流れです。
+        </p>
+      </div>
+
+      <div class="timeline">
+        <article class="step">
+          <div class="step-num">1</div>
+          <div class="step-card">
+            <h3>貴社が把握している顧客情報を整理します</h3>
+            <p>
+              導入事例記事は営業活動で活用するためのコンテンツです。まずは、貴社が営業やサポートの中で把握している顧客の状況を整理します。
+            </p>
+            <div class="info-grid">
+              <div class="info-box"><strong>導入前の課題</strong><span>どんな業務課題や不満があったのか。</span></div>
+              <div class="info-box"><strong>導入のきっかけ</strong><span>なぜ検討が始まったのか。</span></div>
+              <div class="info-box"><strong>選定理由</strong><span>なぜ貴社サービスが選ばれたのか。</span></div>
+              <div class="info-box"><strong>導入後の変化</strong><span>どのような成果や反応があったのか。</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-num">2</div>
+          <div class="step-card">
+            <h3>事実確認と不足情報を整理します</h3>
+            <p>
+              ヒアリング内容をもとに、すでに分かっていること、確認が必要なこと、インタビューで聞くべきことを分けて整理します。
+            </p>
+            <div class="quote-card">
+              インタビューはゼロから情報を探す場ではありません。事前に整理した情報をもとに、事実を確認し、不足している情報をお客様の言葉で聞いていく場です。
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-num">3</div>
+          <div class="step-card">
+            <h3>インタビューの流れを設計します</h3>
+            <p>
+              読者が自然に理解できるよう、導入前の課題から導入後の変化まで、話の流れを設計します。ただし、当日は機械的に質問するのではなく、会話の中で必要な情報を引き出します。
+            </p>
+            <div class="info-grid">
+              <div class="info-box"><strong>導入前</strong><span>どのような課題を抱えていたのか。</span></div>
+              <div class="info-box"><strong>検討時</strong><span>何を比較し、何に不安があったのか。</span></div>
+              <div class="info-box"><strong>導入後</strong><span>何が変わり、どんな反応があったのか。</span></div>
+              <div class="info-box"><strong>今後</strong><span>さらにどう活用していきたいのか。</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-num">4</div>
+          <div class="step-card">
+            <h3>インタビュー当日は、具体的な言葉を引き出します</h3>
+            <p>
+              導入事例で重要なのは、抽象的な感想だけで終わらせないことです。「便利です」「助かっています」を、読者がイメージできる具体的な言葉に変えていきます。
+            </p>
+            <div class="before-after">
+              <div class="ba-card bad">
+                <span class="ba-label">抽象的な回答</span>
+                <p>便利になりました。効率化できました。</p>
+              </div>
+              <div class="ba-card good">
+                <span class="ba-label">記事で使いやすい回答</span>
+                <p>以前は毎日30分かかっていた確認作業が、今は10分ほどで終わるようになりました。</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-num">5</div>
+          <div class="step-card">
+            <h3>必要に応じて、写真も撮影します</h3>
+            <p>
+              担当者の表情、オフィスの雰囲気、サービスを利用している様子などがあると、記事全体にリアリティが生まれます。記事の内容に合わせて、当日必要な写真を撮影します。
+            </p>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-num">6</div>
+          <div class="step-card">
+            <h3>取材内容を、営業で使いやすい記事に構成します</h3>
+            <p>
+              インタビュー後は、録音内容やメモをもとに記事を作成します。単なる文字起こしではなく、読者が理解しやすい流れに整理し、営業で活用しやすい表現へ整えます。
+            </p>
+            <div class="info-grid">
+              <div class="info-box"><strong>流れを整理</strong><span>話の順番を読みやすく並べ替えます。</span></div>
+              <div class="info-box"><strong>重複を整理</strong><span>同じ内容の繰り返しをまとめます。</span></div>
+              <div class="info-box"><strong>見出しを設計</strong><span>読者が要点を追いやすい形にします。</span></div>
+              <div class="info-box"><strong>変化を明確化</strong><span>導入前後の違いを伝わりやすくします。</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-num">7</div>
+          <div class="step-card">
+            <h3>初稿を貴社に確認いただきます</h3>
+            <p>
+              まずは貴社に、サービス内容の表現、導入前後の流れ、営業資料としての使いやすさ、数字や固有名詞の正確性などをご確認いただきます。
+            </p>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-num">8</div>
+          <div class="step-card">
+            <h3>修正後、取材先のお客様にも確認いただきます</h3>
+            <p>
+              貴社確認後、修正を反映した原稿を取材先のお客様にも確認いただきます。公開前に確認できる工程があることで、お客様も安心してインタビューに答えやすくなります。
+            </p>
+            <div class="check-flow">
+              <div class="check-card"><span class="badge">安心</span><strong>公開前に確認できる</strong><span>取材先の不安を減らします。</span></div>
+              <div class="check-card"><span class="badge">調整</span><strong>事実関係を直せる</strong><span>数字や名称の誤りを防ぎます。</span></div>
+              <div class="check-card"><span class="badge">協力</span><strong>答えやすくなる</strong><span>確認工程があることで協力を得やすくなります。</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-num">9</div>
+          <div class="step-card">
+            <h3>最終調整を行い、納品します</h3>
+            <p>
+              取材先のお客様からの確認内容を反映し、文章の流れ、見出し、写真の使い方、表現の細部を整えます。公開後は、営業資料、商談前の共有資料、メール営業、展示会後のフォローなどにも活用できます。
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="summary">
+      <h2>制作の流れまとめ</h2>
+      <div class="summary-grid">
+        <div class="summary-item"><strong>1. 顧客情報整理</strong><span>貴社が把握している導入背景を整理します。</span></div>
+        <div class="summary-item"><strong>2. 不足情報整理</strong><span>インタビューで聞くべきことを明確にします。</span></div>
+        <div class="summary-item"><strong>3. 流れを設計</strong><span>読者が理解しやすい順番を作ります。</span></div>
+        <div class="summary-item"><strong>4. インタビュー</strong><span>具体的な言葉を引き出します。</span></div>
+        <div class="summary-item"><strong>5. 写真撮影</strong><span>必要に応じて写真も撮影します。</span></div>
+        <div class="summary-item"><strong>6. 原稿作成</strong><span>営業で使いやすい記事に構成します。</span></div>
+        <div class="summary-item"><strong>7. 貴社確認</strong><span>訴求や事実関係を確認します。</span></div>
+        <div class="summary-item"><strong>8. 取材先確認</strong><span>お客様にも公開前に確認いただきます。</span></div>
+        <div class="summary-item"><strong>9. 納品</strong><span>最終調整を行い、公開できる状態にします。</span></div>
+      </div>
+      <div class="closing">
+        <p>
+          導入事例インタビューは、当日の会話だけで作るものではありません。事前に情報を整理し、聞くべきことを明確にする。その準備があることで、取材先のお客様も安心して話しやすくなり、読み手にも伝わる記事になります。
+        </p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
