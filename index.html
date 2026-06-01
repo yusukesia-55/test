@@ -1,4 +1,4 @@
-<!-- シナグロ ORGANIC SALAD&CAFE / 整った版（モザイク化前）。画像は image/202606-cinagro-XXXX.jpg -->
+<!-- シナグロ ORGANIC SALAD&CAFE / 統一レイアウト版。画像は image/202606-cinagro-XXXX.jpg -->
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&display=swap" rel="stylesheet">
 <style>
@@ -17,10 +17,7 @@
 .hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(20,28,15,.85),rgba(20,28,15,.34) 44%,rgba(20,28,15,.04) 74%,transparent)}
 .hero-text{position:relative;z-index:2;color:#fff;padding:0 6vw 9vh;max-width:62rem;display:flex;flex-direction:column;gap:1.3rem}
 .hero-text>*{opacity:0;transform:translateY(18px);animation:rise .95s cubic-bezier(.2,.7,.2,1) forwards}
-.hero-text>*:nth-child(1){animation-delay:.15s}.hero-text>*:nth-child(2){animation-delay:.28s}.hero-text>*:nth-child(3){animation-delay:.42s}.hero-text>*:nth-child(4){animation-delay:.56s}.hero-text>*:nth-child(5){
-    animation-delay: .7s;
-    /* [disabled]font-size: 18px; */
-}
+.hero-text>*:nth-child(1){animation-delay:.15s}.hero-text>*:nth-child(2){animation-delay:.28s}.hero-text>*:nth-child(3){animation-delay:.42s}.hero-text>*:nth-child(4){animation-delay:.56s}.hero-text>*:nth-child(5){animation-delay:.7s}
 .kicker{font-family:var(--num);font-size:.82rem;letter-spacing:.28em;text-transform:uppercase;color:#dbe5bf;font-weight:600}
 .tags{display:flex;gap:.5rem;flex-wrap:wrap}
 .tags span{font-size:.72rem;letter-spacing:.18em;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:.35em .9em;color:#f1f3e8}
@@ -75,67 +72,6 @@
 .feature-bg{background:linear-gradient(180deg,#f3f0e2,#faf8f1 72%);max-width:100%;padding-left:24px;padding-right:24px}
 .feature-bg .ch-head,.feature-bg .ch-photos{max-width:74rem;margin-left:auto;margin-right:auto}
 .feature-bg .ch-body,.feature-bg .pull{margin-left:auto;margin-right:auto}
-/* === カレー章スプレッド（frontend-design） === */
-.spread-ch .ch-ghost{display:none}
-.sp-head{max-width:74rem;margin:0 auto 2.2rem}
-.sp-meta{display:flex;align-items:baseline;gap:1.1rem;margin-bottom:.5rem}
-.sp-num{font-family:var(--num);font-weight:600;font-size:clamp(2.2rem,5vw,3.4rem);line-height:.8;color:var(--green)}
-.sp-eyebrow{font-size:.78rem;letter-spacing:.26em;color:var(--soft);position:relative;padding-left:1.05rem}
-.sp-eyebrow::before{content:"";position:absolute;left:0;top:50%;width:.5rem;height:.5rem;background:var(--lemon);border-radius:50%;transform:translateY(-50%)}
-.sp-head h2{font-family:var(--jp-serif);font-weight:800;font-size:clamp(1.55rem,3.4vw,2.45rem);line-height:1.45;color:var(--ink);letter-spacing:.02em}
-.spread{display:grid;grid-template-columns:5fr 7fr;gap:var(--gap);align-items:stretch;position:relative;z-index:1}
-/* 左：写真2枚で高さを分担（本文が長くても引き伸ばさず、画像で埋める） */
-.sp-left{grid-column:1;display:flex;flex-direction:column;gap:var(--gap);min-height:26rem}
-.sp-left figure{position:relative;overflow:hidden;border-radius:2px;background:var(--paper);margin:0}
-.sp-left figure:nth-child(1){flex:1.6}.sp-left figure:nth-child(2){flex:1}
-.sp-left img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.sp-left figure:hover img{transform:scale(1.05)}
-/* 右：主役を横長で大きく＋本文に余白 */
-.sp-right{grid-column:2;display:flex;flex-direction:column}
-.sp-main{position:relative;margin:0}
-.sp-main .ph-frame{display:block;position:relative;overflow:hidden;border-radius:2px;background:var(--paper)}
-.sp-main img{aspect-ratio:16/10;width:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.sp-main:hover img{transform:scale(1.04)}
-.sp-tag{position:absolute;left:0;bottom:0;z-index:2;background:var(--green-deep);color:#f3f1e6;font-size:.72rem;letter-spacing:.16em;padding:.45em 1em;border-top-right-radius:3px}
-.sp-main figcaption{font-size:.74rem;letter-spacing:.05em;color:var(--soft);margin-top:.55rem}
-.sp-main figcaption::before{content:"";display:inline-block;width:14px;height:1px;background:var(--green);vertical-align:middle;margin-right:.5em;opacity:.7}
-.sp-text{max-width:34rem;padding-top:1.6rem}
-.sp-text p{font-size:1.04rem;line-height:2.15;color:#33402a}.sp-text p+p{margin-top:1.4rem}
-.feature-bg .spread{max-width:74rem;margin-left:auto;margin-right:auto}
-.reveal.in .spread>*{animation:rise .8s both}
-.reveal.in .spread>*:nth-child(2){animation-delay:.12s}
-/* === カレー章：縦書き（左に写真・右に縦組み本文） === */
-.tate-ch .ch-ghost{display:none}
-/* 上：写真3枚（左に縦2枚＋横に少し大きい1枚） */
-.tate-photos{
-    display: flex;
-    gap: var(--gap);
-    height: clamp(20rem,42vh,29rem);
-    max-width: 70rem;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1
-}
-.tate-col{flex:1;display:flex;flex-direction:column;gap:var(--gap);min-width:0}
-.tate-photos figure{position:relative;overflow:hidden;border-radius:2px;background:var(--paper);margin:0}
-.tate-col figure{flex:1}.tate-big{flex:1.9}
-.tate-photos img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.tate-photos figure:hover img{transform:scale(1.04)}
-/* 下：縦書き本文（右の列から左へ読む） */
-.tate-text{writing-mode:vertical-rl;text-orientation:mixed;height:clamp(13rem,30vh,16.5rem);width:fit-content;max-width:100%;margin:1.9rem auto 0;position:relative;z-index:1}
-.tate-text p{
-    font-family: var(--jp-sans);
-    font-size: 1rem;
-    line-height: 2;
-    letter-spacing: .02em;
-    color: #33402a;
-    margin: 0 0 0 1.05rem
-}
-.tate-text p:last-child{margin-left:0}
-.chapter.tate-ch.feature-bg.reveal .tate-text p {
-}
-.feature-bg .tate-photos{margin-left:auto;margin-right:auto}
-.reveal.in .tate-photos>*{animation:rise .8s both}.reveal.in .tate-photos>*:nth-child(2){animation-delay:.1s}
 .data{max-width:62rem;margin:9vh auto 0;padding:0 24px}
 .data-card{position:relative;overflow:hidden;background:var(--green-deep);color:#f3f1e6;border-radius:6px;padding:clamp(2rem,5vw,3.4rem);display:grid;grid-template-columns:1.1fr 1fr;gap:2.4rem}
 .data-card::before{content:"C";position:absolute;right:-2rem;bottom:-5rem;font-family:var(--num);font-weight:600;font-size:18rem;line-height:1;color:#fff;opacity:.05}
@@ -158,15 +94,6 @@
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes ghostin{from{opacity:0;transform:translateY(24px)}to{opacity:.06;transform:none}}
 @media(max-width:900px){.feature>figure{flex:1 1 calc(50% - var(--gap))}.grid>figure{flex:1 1 calc(50% - var(--gap))}}
-@media(max-width:900px) and (min-width:621px){
-  .tate-photos{height:clamp(17rem,42vh,24rem)}.tate-text{height:clamp(10rem,30vh,14rem)}
-  .spread{display:block}.sp-right{display:block}
-  .sp-main img{aspect-ratio:16/9}
-  .sp-text{max-width:none;padding-top:1.3rem}
-  .sp-left{flex-direction:row;gap:var(--gap);margin-top:var(--gap);min-height:0}
-  .sp-left figure{flex:1;position:static}.sp-left figure:nth-child(1){flex:1}
-  .sp-left img{position:static;height:auto;aspect-ratio:4/3}
-}
 @media(max-width:620px){
   .mag{font-size:16px}.hero{min-height:90vh}.hero-text{padding:0 22px 8vh;gap:1rem}.hero-title{font-size:clamp(2rem,9vw,2.9rem);line-height:1.4}
   .side-label,.scroll-cue{display:none}
@@ -177,37 +104,20 @@
   .ch-num{font-size:3.2rem}.ch-head h2{grid-column:auto;font-size:1.45rem;line-height:1.55}
   .ch-photos>figure{flex:1 1 100% !important}.ch-photos img,.trio>figure:nth-child(1) img,.feature>figure:nth-child(1) img{aspect-ratio:4/3}
   .pull{font-size:1.35rem;margin-top:2.2rem}
-  .sp-head{margin-bottom:1.4rem}.sp-num{font-size:2.6rem}
-  .spread{display:flex;flex-direction:column;gap:14px}
-  .sp-right{display:contents}
-  .sp-main{order:1;margin:0}.sp-main img{aspect-ratio:4/3}
-  .sp-text{order:2;max-width:none;padding-top:0}
-  .sp-left{order:3;flex-direction:row;gap:12px;min-height:0}
-  .sp-left figure{flex:1;position:static}
-  .sp-left img{position:static;height:auto;aspect-ratio:4/3}
-  /* 縦書き章：スマホは横書きに戻す */
-  .tate-photos{flex-direction:column;height:auto;gap:12px}
-  .tate-big{order:-1}
-  .tate-photos figure,.tate-big{position:static;flex:none}
-  .tate-photos img{position:static;height:auto;aspect-ratio:4/3}
-  .tate-col{flex-direction:row;gap:12px}.tate-col figure{flex:1}
-  .tate-text{writing-mode:horizontal-tb;height:auto;width:auto;max-width:none;margin-top:.4rem}
-  .tate-text p{writing-mode:horizontal-tb;margin:0 0 1.1rem;line-height:2}
   .data-card{grid-template-columns:1fr;gap:1.6rem;padding:1.8rem}.data .note{border-left:none;border-top:1px solid #5c6e44;padding-left:0;padding-top:1.4rem}.data dl{grid-template-columns:4.8rem 1fr}
 }
-@media(prefers-reduced-motion:reduce){.reveal{transition:none;opacity:1;transform:none}.reveal.in .ch-photos figure,.reveal.in .ch-ghost,.reveal.in .tate-photos>*,.reveal.in .spread>*{animation:none}.ch-ghost{opacity:.06}.hero-bg img,.hero-text>*,.side-label,.scroll-cue{animation:none;opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.reveal{transition:none;opacity:1;transform:none}.reveal.in .ch-photos figure,.reveal.in .ch-ghost{animation:none}.ch-ghost{opacity:.06}.hero-bg img,.hero-text>*,.side-label,.scroll-cue{animation:none;opacity:1;transform:none}}
 </style>
 <div class="progress" id="prog"></div>
 <article class="mag">
   <header class="hero">
-    <div class="hero-bg"><img src="image/202606-cinagro-01672.jpg" alt="有機野菜たっぷりサラダ" fetchpriority="high" decoding="async"></div>
+    <div class="hero-bg"><img src="image/202606-cinagro-01664.jpg" alt="有機野菜たっぷりサラダ" fetchpriority="high" decoding="async"></div>
     <div class="hero-scrim"></div>
     <div class="side-label"><span>野菜が、ちゃんとおいしい。</span></div>
     <div class="hero-text">
       <span class="kicker">Omiya &middot; Sogo 3F</span>
       <div class="tags"><span>大宮</span><span>そごう大宮</span><span>オーガニックランチ</span></div>
-      <h1 class="hero-title">そごう大宮3階<br>
-      「シナグロ」で<br><b>オーガニックランチ</b></h1>
+      <h1 class="hero-title">そごう大宮3階<br>「シナグロ」で<br><b>オーガニックランチ</b></h1>
       <p class="hero-sub">南インド風チキンカレーと、英国レシピのレモンケーキ。買い物の合間に、少し体にうれしい時間を。</p>
       <span class="brand">CINAGRO &mdash; ORGANIC SALAD &amp; CAFE</span>
     </div>
@@ -239,18 +149,14 @@
       
     </section>
 
-    <section class="chapter tate-ch feature-bg reveal">
-      <div class="sp-head"><div class="sp-meta"><span class="sp-num">03</span><span class="sp-eyebrow">今回のメイン</span></div><h2>数量限定の<br>「南インド風チキンカレー」</h2></div>
-      <div class="tate-photos">
-        <div class="tate-col">
-          <figure><img src="image/202606-cinagro-01672.jpg" alt="添えられた野菜" loading="lazy" decoding="async"></figure>
-          <figure><img src="image/202606-cinagro-01658.jpg" alt="カレーのメニュー表" loading="lazy" decoding="async"></figure>
-        </div>
-        <figure class="tate-big"><img src="image/202606-cinagro-01668.jpg" alt="南インド風チキンカレー" loading="lazy" decoding="async"><span class="sp-tag">数量限定</span></figure>
-      </div>
-      <div class="tate-text"><p>今回のメインに選んだのは、数量限定の「南インド風チキンカレー」。メニューによると、インドのケララ地方のカレーをイメージした一皿で、スパイスを炒めて香りを引き立たせ、ココナッツミルクの風味をきかせているそうです。</p>
+    <section class="chapter feature-bg reveal">
+      <span class="ch-ghost" aria-hidden="true">03</span>
+      <div class="ch-head"><span class="ch-num">03</span><span class="ch-label">今回のメイン</span><h2>数量限定の<br>「南インド風チキンカレー」</h2></div>
+      <div class="ch-photos feature"><figure><img src="image/202606-cinagro-01668.jpg" alt="南インド風チキンカレー" loading="lazy" decoding="async"><figcaption>南インド風チキンカレー</figcaption></figure><figure><img src="image/202606-cinagro-01672.jpg" alt="添えられた野菜" loading="lazy" decoding="async"><figcaption>添えられた野菜</figcaption></figure><figure><img src="image/202606-cinagro-01658.jpg" alt="カレーのメニュー表" loading="lazy" decoding="async"><figcaption>カレーのメニュー表</figcaption></figure></div>
+      <div class="ch-body"><p>今回のメインに選んだのは、数量限定の「南インド風チキンカレー」。メニューによると、インドのケララ地方のカレーをイメージした一皿で、スパイスを炒めて香りを引き立たせ、ココナッツミルクの風味をきかせているそうです。</p>
      <p>実際に食べてみると、味わいはとてもヘルシー。スパイスの香りはありつつも重たさはなく、野菜と一緒にすっと食べ進められます。</p>
      <p>カレーというと「こってり」「ガツン」というイメージがありますが、こちらは体にやさしく入ってくるような一皿。買い物途中に食べても、午後の動きが重くなりません。</p></div>
+      
     </section>
 
     <section class="chapter  reveal">
