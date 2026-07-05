@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WATCH IN English — Nippon by Yusuke（学習者体験モック）</title>
+<style>
+@layer reset, base, components;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --ink:     oklch(0.24 0.02 260);
+    --paper:   oklch(0.985 0.005 85);
+    --surface: oklch(0.965 0.008 85);
+    --muted:   oklch(0.52 0.02 260);
+    --accent:  oklch(0.55 0.16 25);
+    --accent-soft: color-mix(in oklch, var(--accent) 10%, var(--paper));
+    --border:  color-mix(in oklch, var(--ink) 12%, transparent);
+    --vocab:   oklch(0.45 0.12 250);
+
+    --step--1: clamp(0.78rem, 0.74rem + 0.2vw, 0.85rem);
+    --step-0:  clamp(1rem, 0.95rem + 0.3vw, 1.1rem);
+    --step-1:  clamp(1.25rem, 1.15rem + 0.5vw, 1.45rem);
+    --step-2:  clamp(1.6rem, 1.4rem + 1vw, 2rem);
+    --space:   clamp(1rem, 0.5rem + 2vw, 2rem);
+
+    font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", serif;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: var(--step-0);
+  }
+  .sans { font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Helvetica Neue", sans-serif; }
+}
+
+@layer components {
+  header.site {
+    display: flex; align-items: baseline; gap: 0.75rem;
+    padding: 0.9rem var(--space);
+    border-bottom: 1px solid var(--border);
+  }
+  header.site .brand {
+    font-size: var(--step-1);
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+  header.site .brand em { font-style: normal; color: var(--accent); }
+  header.site .feature-tag {
+    font-size: var(--step--1);
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  main {
+    max-width: 46rem;
+    margin-inline: auto;
+    padding-block-end: 6rem;
+  }
+
+  .video-shell {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--paper);
+    padding: 0.75rem var(--space) 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .video-frame {
+    aspect-ratio: 16 / 9;
+    border-radius: 6px;
+    overflow: hidden;
+    background: black;
+    box-shadow: 0 8px 24px -12px color-mix(in oklch, var(--ink) 40%, transparent);
+  }
+  .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+  .level-bar {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding-block: 0.5rem 0.25rem;
+  }
+  .level-bar .label { font-size: var(--step--1); color: var(--muted); letter-spacing: 0.1em; }
+  .level-bar button {
+    font: inherit; font-size: var(--step--1);
+    padding: 0.15rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent; color: var(--muted);
+    cursor: pointer;
+  }
+  .level-bar button[aria-pressed="true"] {
+    background: var(--ink); color: var(--paper); border-color: var(--ink);
+  }
+  .level-bar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .article-head { padding: 1.75rem var(--space) 0.5rem; }
+  .article-head h1 { font-size: var(--step-2); font-weight: 600; text-wrap: balance; }
+  .article-head p  { font-size: var(--step--1); color: var(--muted); margin-block-start: 0.4rem; }
+
+  .transcript { padding: 1rem var(--space); }
+
+  .line {
+    display: grid;
+    grid-template-columns: 3.4rem 1fr;
+    gap: 0.9rem;
+    padding: 0.45rem 0.6rem;
+    margin-inline: -0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.25s;
+  }
+  .line:hover { background: var(--surface); }
+  .line:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .line .time {
+    font-family: "SF Mono", "Consolas", monospace;
+    font-size: var(--step--1);
+    color: var(--muted);
+    padding-block-start: 0.35em;
+    text-align: right;
+    letter-spacing: 0.02em;
+  }
+  .line .text { text-wrap: pretty; }
+
+  /* 和訳行 */
+  .line .sub {
+    display: block;
+    font-size: var(--step--1);
+    color: var(--muted);
+    line-height: 1.7;
+    margin-block-start: 0.1rem;
+  }
+  body[data-sub="off"] .line .sub { display: none; }
+
+  .line[data-active] { background: var(--accent-soft); }
+  .line[data-active] .time { color: var(--accent); font-weight: 600; }
+  .line[data-active] .text::before {
+    content: "";
+    display: inline-block;
+    width: 0.45em; height: 0.45em;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-inline-end: 0.5em;
+    vertical-align: 0.15em;
+  }
+
+  .vocab {
+    color: var(--vocab);
+    text-decoration: underline dotted color-mix(in oklch, var(--vocab) 60%, transparent);
+    text-underline-offset: 0.25em;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  .vocab:hover { background: color-mix(in oklch, var(--vocab) 10%, transparent); }
+
+  #popup {
+    position: fixed; z-index: 50;
+    max-width: 21rem;
+    background: var(--ink); color: var(--paper);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: var(--step--1);
+    line-height: 1.7;
+    box-shadow: 0 12px 32px -8px color-mix(in oklch, var(--ink) 60%, transparent);
+    opacity: 0; pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  #popup.show { opacity: 1; pointer-events: auto; transform: none; }
+  #popup .word { font-size: var(--step-0); font-weight: 600; }
+  #popup .pos { color: oklch(0.75 0.05 85); margin-inline-start: 0.5em; }
+  #popup .gloss { color: oklch(0.8 0.02 260); }
+  #popup .taro {
+    margin-block-start: 0.4rem;
+    padding-block-start: 0.4rem;
+    border-top: 1px solid color-mix(in oklch, var(--paper) 20%, transparent);
+  }
+  #popup .taro::before { content: "AIたろう："; color: var(--accent-soft); font-weight: 600; }
+
+  .follow-toggle {
+    position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 30;
+    font: inherit; font-size: var(--step--1);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--paper);
+    color: var(--muted);
+    cursor: pointer;
+    box-shadow: 0 4px 16px -6px color-mix(in oklch, var(--ink) 30%, transparent);
+  }
+  .follow-toggle[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after { transition: none !important; }
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <span class="brand">Nippon <em>by</em> Yusuke</span>
+  <span class="feature-tag sans">WATCH IN — English</span>
+</header>
+
+<main>
+  <div class="video-shell">
+    <div class="video-frame">
+      <div id="player"></div>
+    </div>
+    <div class="level-bar sans" role="group" aria-label="レベル切替（モック）">
+      <span class="label">LEVEL</span>
+      <button aria-pressed="false">A2</button>
+      <button aria-pressed="false">B1</button>
+      <button aria-pressed="true">B2</button>
+      <button aria-pressed="false">C1</button>
+      <button id="subBtn" aria-pressed="true" style="margin-inline-start:auto">和訳</button>
+    </div>
+  </div>
+
+  <div class="article-head">
+    <h1>Catching for Ohtani — Postgame Interview</h1>
+    <p class="sans">テロップをクリックすると、その場面から再生。選択中の行はクリックで一時停止／再クリックで頭から再生。</p>
+  </div>
+
+  <section class="transcript" id="transcript" aria-label="テロップ"></section>
+</main>
+
+<div id="popup" role="tooltip"></div>
+<button class="follow-toggle sans" id="followBtn" aria-pressed="true">● 自動追従 ON</button>
+
+<script>
+const VOCAB = {
+  backontrack: { word: "get back on track", pos: "idiom", gloss: "調子を取り戻す、軌道に戻る",
+    taro: "track＝線路・軌道。脱線した列車が軌道に戻るイメージ。この会見全体のキーワードで、質問者が2回使っています。" },
+  needbe: { word: "when need be", pos: "idiom", gloss: "必要なときに",
+    taro: "when necessary の口語的な言い方。「効率よく打ち取るべき時は打ち取り、三振が欲しい時は三振を取る」という文脈です。" },
+  walks: { word: "walk", pos: "n.（野球）", gloss: "四球、フォアボール",
+    taro: "野球用語。「take two walks」で「四球を2つ出す」。日常語の「歩く」とは別の意味になる典型例です。" },
+  chancetowin: { word: "give us a chance to win", pos: "phrase", gloss: "勝てる試合を作ってくれる",
+    taro: "先発投手を評価する決まり文句。後半で「that's all we ask out of our starting pitchers」（先発に求めるのはそれだけ）と対になっています。" },
+  putupruns: { word: "put up runs", pos: "phrase（野球）", gloss: "得点を挙げる",
+    taro: "put up は「（数字を）掲げる」イメージ。スコアボードに点を載せる、という発想の表現です。" },
+  outing: { word: "outing", pos: "n.", gloss: "登板（1試合分の投球）",
+    taro: "本来は「外出・遠足」。野球では投手の「登板」を指します。文脈で意味が切り替わる語です。" },
+  boost: { word: "a boost of confidence", pos: "phrase", gloss: "自信につながるもの",
+    taro: "boost＝押し上げ。「自信をブーストしてくれるもの」。この会見で2回登場する、話し手の心情の核です。" },
+  samepage: { word: "on the same page", pos: "idiom", gloss: "考えが一致して、息が合って",
+    taro: "「同じページを見ている」＝認識が揃っている。この会見で4回も出てくる最重要フレーズ。バッテリーの信頼関係を表しています。" },
+  qualitystart: { word: "quality start", pos: "n.（野球）", gloss: "クオリティ・スタート（6回以上・自責3以下）",
+    taro: "野球の記録用語ですが、ここでは文字どおり「質の高い先発」の意味も掛かっています。" },
+  callpitches: { word: "call pitches", pos: "phrase（野球）", gloss: "球種のサインを出す",
+    taro: "call＝指示を出す。捕手の仕事です。「call his own pitches」なら投手が自分で球種を決めること。大谷は自分で決めることで知られています。" },
+  whoheis: { word: "he's who he is for a reason", pos: "phrase", gloss: "彼が今の彼なのには理由がある",
+    taro: "一流の人物への賛辞の定型。「サインを出すのが難しい投手だが、それこそが彼を超一流たらしめている」という文脈です。" },
+  leanon: { word: "lean on", pos: "phr. v.", gloss: "〜に頼る",
+    taro: "物理的に「寄りかかる」から「頼る」へ。ここでは通訳のマークに頼る、という意味です。" },
+};
+
+const LINES = [
+  { t: 9,   text: 'Dalton, I know after just the last time you and Shohei worked with each other, there was just so much talk afterwards about you guys <v id="backontrack">getting back on track</v>.', sub: 'ダルトン、前回翔平とバッテリーを組んだ後、二人が調子を取り戻すことについて多くの話題がありましたね。' },
+  { t: 16,  text: 'Can you just kind of tell me as you guys navigated through their lineup and kind of what the feeling was amongst you two and how you were able just to kind of find the ways to be efficient <v id="needbe">when need be</v> and also to get the strike out when need be?', sub: '相手打線をどう攻略したか、二人の間にどんな感覚があったか、必要なときに効率よく打ち取り、必要なときに三振を取る方法をどう見つけたのか教えてもらえますか？' },
+  { t: 28,  text: 'Yeah, I thought he uh, he took two <v id="walks">walks</v> in the first out of it.', sub: 'ええ、初回に四球を2つ出しましたが、そこから立ち直ったと思います。' },
+  { t: 31,  text: "Um, that's uh, it's hard to get out of that that kind of situation.", sub: 'ああいう状況から抜け出すのは簡単ではありません。' },
+  { t: 36,  text: 'Um, I thought he did a good job throughout the game, these guys saw him just a week and a half ago.', sub: '試合を通していい仕事をしたと思います。相手は1週間半前に彼を見たばかりでしたから。' },
+  { t: 44,  text: 'Um, speaking as a hitter, you uh, you kind of have a better idea of what guys are trying to do to you.', sub: '打者の立場で言えば、相手投手が自分に何をしようとしているか、だいたい分かるようになるんです。' },
+  { t: 51,  text: 'Um, over the course of facing a guy twice in a week.', sub: '1週間のうちに同じ投手と2回対戦すればね。' },
+  { t: 53,  text: 'Uh, but I I thought he threw the ball really well.', sub: 'でも、彼は本当にいいボールを投げていたと思います。' },
+  { t: 54,  text: 'I thought he <v id="chancetowin">gave us a chance to win</v>, um, King was throwing the ball really well tonight, uh, made it tough for us to <v id="putupruns">put up runs</v>, luckily we got a big swing out of Teo and uh, it was enough to do it, but uh, I thought Shohei threw the ball really well tonight.', sub: '勝つチャンスを作ってくれました。今夜はキングも素晴らしい投球で、こちらは得点するのが難しかった。幸いテオの一発が出て、それで十分でした。翔平は本当に良かったと思います。' },
+  { t: 65,  text: 'Everyone and even yourself talked about how, you know, you could use last week as a learning experience.', sub: '誰もが、あなた自身も、先週を学びの経験にできると話していました。' },
+  { t: 71,  text: 'How did you find just now coming out of this <v id="outing">outing</v> and kind of how you two were able to kind of communicate with each other, work with each other and also just like get back on track together?', sub: '今回の登板を終えてみて、二人がどうコミュニケーションを取り、協力し、一緒に調子を取り戻せたと感じていますか？' },
+  { t: 79,  text: "Yeah, it's kind of like <v id=\"boost\">a boost of confidence</v>, you um, you feel as if you guys are <v id=\"samepage\">on the same page</v>.", sub: 'ええ、自信になりますね。お互いの考えが一致していると感じられるんです。' },
+  { t: 84,  text: 'Uh, throughout the whole night and uh, like I said, obviously you take those two walks in the first out of it and uh, I think he had a very <v id="qualitystart">quality start</v>.', sub: '一晩を通してね。さっき言ったように、初回の四球2つを別にすれば、非常に質の高い先発だったと思います。' },
+  { t: 92,  text: "Um, he gives us a chance to win and that's all we ask out of our starting pitchers every time.", sub: '勝つチャンスをくれる。それが先発投手に毎回求めるすべてです。' },
+  { t: 99,  text: 'Um, uh, Ohtani said last time, uh, when he started <v id="callpitches">calling his own pitches</v> that you kind of wanted to show you what he likes to do.', sub: '大谷は前回、自分で球種を決め始めたとき、自分が何を好むかをあなたに見せたかったと言っていました。' },
+  { t: 110, text: 'How much better do you feel you understand what he likes to do now?', sub: '彼のやりたいことを、今はどれくらい理解できていると感じますか？' },
+  { t: 111, text: 'Yeah, I felt tonight I had a good idea of uh, what he was trying to do.', sub: 'ええ、今夜は彼が何をしようとしているか、よく分かっていたと思います。' },
+  { t: 115, text: 'Um, I thought we were on the same page a lot tonight and uh, obviously that once again is a boost of confidence moving forward.', sub: '今夜はかなり息が合っていたと思うし、それがまた今後への自信になります。' },
+  { t: 122, text: "Uh, it's not an easy guy to call for, but also <v id=\"whoheis\">he's who he is for a reason</v>, you know?", sub: 'サインを出すのが簡単な投手ではありません。でも、彼が彼である理由があるんですよ。' },
+  { t: 128, text: "Um, so uh, yeah, I'm glad we were on the same page for most of tonight and uh, look forward to his next one.", sub: '今夜はほとんどの場面で息が合っていて嬉しかった。次の登板が楽しみです。' },
+  { t: 132, text: 'What makes him challenging to call for?', sub: '何が彼へのサイン出しを難しくしているのですか？' },
+  { t: 134, text: "It's a lot of pitches that are really good, a lot of options.", sub: '本当にいい球種が多くて、選択肢が多いんです。' },
+  { t: 140, text: "Um, yeah, I think that's the best way to put it.", sub: 'それが一番的確な言い方だと思います。' },
+  { t: 142, text: 'Just just to confirm, were you calling all of the pitches tonight?', sub: '確認ですが、今夜は全球あなたがサインを出していたのですか？' },
+  { t: 145, text: 'Majority, yes.', sub: '大部分は、はい。' },
+  { t: 146, text: 'Yes.', sub: 'はい。' },
+  { t: 147, text: "How tough is it to sort of game plan inning by inning with him, especially because unlike the traditional pitcher, like you're not really like sitting with him in the dugout, like you don't really have this time in between innings.", sub: 'イニングごとに彼と作戦を立てるのは大変では？普通の投手と違って、ベンチで隣に座るわけでも、イニング間に話す時間があるわけでもない。' },
+  { t: 155, text: "Yeah, it's tough.", sub: 'ええ、大変です。' },
+  { t: 156, text: 'Um, it kind of, we have to <v id="leanon">lean on</v> Mark a little bit, um, for translation, uh, obviously will helping out with translation.', sub: '通訳の面でマークに少し頼ることになります。ウィルも通訳を手伝ってくれています。' },
+  { t: 166, text: "But uh, Mark just kind of communicated between between the two of us, um, it makes it a little tougher, obviously, but um, I think he does a great job with it and uh, like I said, I thought we were on the same page a lot tonight.", sub: 'マークが二人の間を取り持ってくれました。当然少し難しくはなりますが、彼は素晴らしい仕事をしてくれるし、さっき言ったとおり、今夜は本当に息が合っていたと思います。' },
+];
+
+/* ── テロップDOM生成 ─────────────── */
+const transcript = document.getElementById('transcript');
+const fmt = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+
+LINES.forEach((line, i) => {
+  const el = document.createElement('div');
+  el.className = 'line';
+  el.tabIndex = 0;
+  el.role = 'button';
+  el.dataset.start = line.t;
+  el.dataset.end = (LINES[i+1]?.t ?? line.t + 8);
+  el.innerHTML = `<span class="time sans">${fmt(line.t)}</span><span class="text">${
+    line.text.replace(/<v id="([^"]+)">([^<]+)<\/v>/g,
+      '<span class="vocab" data-vocab-id="$1" tabindex="0">$2</span>')
+  }<span class="sub sans">${line.sub}</span></span>`;
+  transcript.appendChild(el);
+});
+
+/* ── YouTube IFrame API ─────────────── */
+let player, ready = false;
+const tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+document.head.appendChild(tag);
+
+window.onYouTubeIframeAPIReady = () => {
+  player = new YT.Player('player', {
+    videoId: '0GIk6tW8-1c',
+    playerVars: { rel: 0, playsinline: 1 },
+    events: { onReady: () => { ready = true; } }
+  });
+};
+
+/* ── クリック → シーク／一時停止 ─────── */
+function handleLineClick(line) {
+  if (!ready) return;
+  if (line === activeEl) {
+    if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+      player.pauseVideo();
+    } else {
+      player.seekTo(Number(line.dataset.start), true);
+      player.playVideo();
+    }
+  } else {
+    player.seekTo(Number(line.dataset.start), true);
+    player.playVideo();
+  }
+}
+transcript.addEventListener('click', e => {
+  if (e.target.closest('.vocab')) return;
+  const line = e.target.closest('.line');
+  if (line) handleLineClick(line);
+});
+transcript.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.classList.contains('line')) {
+    handleLineClick(e.target);
+  }
+});
+
+/* ── 追従スイッチ ─────────────── */
+let follow = true;
+const followBtn = document.getElementById('followBtn');
+followBtn.addEventListener('click', () => {
+  follow = !follow;
+  followBtn.setAttribute('aria-pressed', follow);
+  followBtn.textContent = follow ? '● 自動追従 ON' : '○ 自動追従 OFF';
+});
+
+/* ── 和訳オン・オフ ─────────────── */
+const subBtn = document.getElementById('subBtn');
+subBtn.addEventListener('click', () => {
+  const turningOff = document.body.dataset.sub !== 'off';
+  document.body.dataset.sub = turningOff ? 'off' : 'on';
+  subBtn.setAttribute('aria-pressed', String(!turningOff));
+});
+
+/* ── 再生時間 → ハイライト＆自動スクロール ── */
+let activeEl = null;
+setInterval(() => {
+  if (!ready || player.getPlayerState() !== YT.PlayerState.PLAYING) return;
+  const t = player.getCurrentTime();
+  const lines = transcript.children;
+  let hit = null;
+  for (const el of lines) {
+    if (t >= el.dataset.start && t < el.dataset.end) { hit = el; break; }
+  }
+  if (hit !== activeEl) {
+    activeEl?.removeAttribute('data-active');
+    activeEl = hit;
+    if (hit) {
+      hit.setAttribute('data-active', '');
+      if (follow) hit.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+}, 250);
+
+/* ── 語彙ポップアップ ─────────────── */
+const popup = document.getElementById('popup');
+function showPopup(target) {
+  const v = VOCAB[target.dataset.vocabId];
+  if (!v) return;
+  popup.innerHTML = `
+    <div><span class="word">${v.word}</span><span class="pos">${v.pos}</span></div>
+    <div class="gloss">${v.gloss}</div>
+    <div class="taro">${v.taro}</div>`;
+  const r = target.getBoundingClientRect();
+  popup.classList.add('show');
+  const pw = popup.offsetWidth;
+  let x = r.left + r.width/2 - pw/2;
+  x = Math.max(8, Math.min(x, innerWidth - pw - 8));
+  let y = r.bottom + 8;
+  if (y + popup.offsetHeight > innerHeight - 8) y = r.top - popup.offsetHeight - 8;
+  popup.style.left = x + 'px';
+  popup.style.top = y + 'px';
+}
+document.addEventListener('click', e => {
+  const v = e.target.closest('.vocab');
+  if (v) { showPopup(v); e.stopPropagation(); }
+  else if (!e.target.closest('#popup')) popup.classList.remove('show');
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') popup.classList.remove('show');
+  if (e.key === 'Enter' && e.target.classList?.contains('vocab')) showPopup(e.target);
+});
+window.addEventListener('scroll', () => popup.classList.remove('show'), { passive: true });
+</script>
+</body>
+</html>
