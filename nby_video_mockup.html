@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WATCH IN — Nippon by Yusuke（モックアップ）</title>
+<style>
+@layer reset, base, components;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --ink:     oklch(0.24 0.02 260);
+    --paper:   oklch(0.985 0.005 85);
+    --surface: oklch(0.965 0.008 85);
+    --muted:   oklch(0.52 0.02 260);
+    --accent:  oklch(0.55 0.16 25);          /* 深い朱 */
+    --accent-soft: color-mix(in oklch, var(--accent) 10%, var(--paper));
+    --border:  color-mix(in oklch, var(--ink) 12%, transparent);
+    --vocab:   oklch(0.45 0.12 250);         /* 語彙リンクの藍 */
+
+    --step--1: clamp(0.78rem, 0.74rem + 0.2vw, 0.85rem);
+    --step-0:  clamp(1rem, 0.95rem + 0.3vw, 1.1rem);
+    --step-1:  clamp(1.25rem, 1.15rem + 0.5vw, 1.45rem);
+    --step-2:  clamp(1.6rem, 1.4rem + 1vw, 2rem);
+    --space:   clamp(1rem, 0.5rem + 2vw, 2rem);
+
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.9;
+    font-size: var(--step-0);
+  }
+  .sans { font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif; }
+}
+
+@layer components {
+  /* ── ヘッダー ─────────────────── */
+  header.site {
+    display: flex; align-items: baseline; gap: 0.75rem;
+    padding: 0.9rem var(--space);
+    border-bottom: 1px solid var(--border);
+  }
+  header.site .brand {
+    font-size: var(--step-1);
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+  header.site .brand em { font-style: normal; color: var(--accent); }
+  header.site .feature-tag {
+    font-size: var(--step--1);
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  main {
+    max-width: 46rem;
+    margin-inline: auto;
+    padding-block-end: 6rem;
+  }
+
+  /* ── 動画（stickyで常に上部） ─────── */
+  .video-shell {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--paper);
+    padding: 0.75rem var(--space) 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .video-frame {
+    aspect-ratio: 16 / 9;
+    border-radius: 6px;
+    overflow: hidden;
+    background: black;
+    box-shadow: 0 8px 24px -12px color-mix(in oklch, var(--ink) 40%, transparent);
+  }
+  .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+  .level-bar {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding-block: 0.5rem 0.25rem;
+  }
+  .level-bar .label { font-size: var(--step--1); color: var(--muted); letter-spacing: 0.1em; }
+  .level-bar button {
+    font: inherit; font-size: var(--step--1);
+    padding: 0.15rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent; color: var(--muted);
+    cursor: pointer;
+  }
+  .level-bar button[aria-pressed="true"] {
+    background: var(--ink); color: var(--paper); border-color: var(--ink);
+  }
+  .level-bar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ── 記事タイトル ─────────────── */
+  .article-head { padding: 1.75rem var(--space) 0.5rem; }
+  .article-head h1 { font-size: var(--step-2); font-weight: 600; text-wrap: balance; }
+  .article-head p  { font-size: var(--step--1); color: var(--muted); margin-block-start: 0.4rem; }
+
+  /* ── テロップ本体 ─────────────── */
+  .transcript { padding: 1rem var(--space); }
+
+  .line {
+    display: grid;
+    grid-template-columns: 3.4rem 1fr;
+    gap: 0.9rem;
+    padding: 0.45rem 0.6rem;
+    margin-inline: -0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.25s;
+  }
+  .line:hover { background: var(--surface); }
+  .line:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .line .time {
+    font-family: "SF Mono", "Consolas", monospace;
+    font-size: var(--step--1);
+    color: var(--muted);
+    padding-block-start: 0.35em;
+    text-align: right;
+    letter-spacing: 0.02em;
+  }
+  .line .text { text-wrap: pretty; }
+
+  /* 現在再生中の行 */
+  .line[data-active] {
+    background: var(--accent-soft);
+  }
+  .line[data-active] .time { color: var(--accent); font-weight: 600; }
+  .line[data-active] .text::before {
+    content: "";
+    display: inline-block;
+    width: 0.45em; height: 0.45em;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-inline-end: 0.5em;
+    vertical-align: 0.15em;
+  }
+
+  /* ── 語彙ポップアップ ───────────── */
+  .vocab {
+    color: var(--vocab);
+    text-decoration: underline dotted color-mix(in oklch, var(--vocab) 60%, transparent);
+    text-underline-offset: 0.25em;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  .vocab:hover { background: color-mix(in oklch, var(--vocab) 10%, transparent); }
+
+  #popup {
+    position: fixed; z-index: 50;
+    max-width: 20rem;
+    background: var(--ink); color: var(--paper);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: var(--step--1);
+    line-height: 1.7;
+    box-shadow: 0 12px 32px -8px color-mix(in oklch, var(--ink) 60%, transparent);
+    opacity: 0; pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  #popup.show { opacity: 1; pointer-events: auto; transform: none; }
+  #popup .word { font-size: var(--step-0); font-weight: 600; }
+  #popup .reading { color: oklch(0.75 0.05 85); margin-inline-start: 0.5em; }
+  #popup .en { color: oklch(0.8 0.02 260); font-style: italic; }
+  #popup .taro {
+    margin-block-start: 0.4rem;
+    padding-block-start: 0.4rem;
+    border-top: 1px solid color-mix(in oklch, var(--paper) 20%, transparent);
+  }
+  #popup .taro::before { content: "AIたろう："; color: var(--accent-soft); font-weight: 600; }
+
+  /* 追従スイッチ */
+  .follow-toggle {
+    position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 30;
+    font: inherit; font-size: var(--step--1);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--paper);
+    color: var(--muted);
+    cursor: pointer;
+    box-shadow: 0 4px 16px -6px color-mix(in oklch, var(--ink) 30%, transparent);
+  }
+  .follow-toggle[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after { transition: none !important; }
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <span class="brand">Nippon <em>by</em> Yusuke</span>
+  <span class="feature-tag sans">WATCH IN — 動画で読む</span>
+</header>
+
+<main>
+  <div class="video-shell">
+    <div class="video-frame">
+      <div id="player"></div>
+    </div>
+    <div class="level-bar sans" role="group" aria-label="レベル切替（モック）">
+      <span class="label">LEVEL</span>
+      <button aria-pressed="false">N5</button>
+      <button aria-pressed="false">N4</button>
+      <button aria-pressed="true">N3</button>
+      <button aria-pressed="false">N2</button>
+      <button aria-pressed="false">N1</button>
+    </div>
+  </div>
+
+  <div class="article-head">
+    <h1>ももくり2024、何する？</h1>
+    <p class="sans">テロップをクリックすると、その場面から動画が再生されます。</p>
+  </div>
+
+  <section class="transcript" id="transcript" aria-label="テロップ"></section>
+</main>
+
+<div id="popup" role="tooltip"></div>
+<button class="follow-toggle sans" id="followBtn" aria-pressed="true">● 自動追従 ON</button>
+
+<script>
+/* ─────────────────────────────────────────
+   データ：本番ではSupabaseからビルド時に焼き込み。
+   text内の <v> タグ = data-vocab-id 相当（デモ用）。
+────────────────────────────────────────── */
+const VOCAB = {
+  sukkari: { word: "すっかり", reading: "adv.", en: "completely, entirely",
+    taro: "「すっかり冬」＝もう完全に冬になった、という感覚。変化が終わった状態を表します。" },
+  omatase: { word: "お待たせ", reading: "おまたせ", en: "sorry to keep you waiting",
+    taro: "待たせた相手への定番のあいさつ。「お待たせしました」の短い形です。" },
+  oshare: { word: "おしゃれ", reading: "な形容詞", en: "stylish, fashionable",
+    taro: "「いつもよりおしゃれじゃん」の「じゃん」はカジュアルな同意・確認の言い方です。" },
+  nobiru: { word: "伸びる", reading: "のびる（伸び／て：伸びて）", en: "to grow (longer)",
+    taro: "語幹「伸び」に「た」が付いて「伸びた」。髪や身長が長くなるときに使います。" },
+  sateoki: { word: "さておき", reading: "〜はさておき", en: "setting ~ aside",
+    taro: "話題を切り替える合図。「そんな話はさておき」＝その話は一旦置いて、本題へ。" },
+  gidai: { word: "議題", reading: "ぎだい", en: "agenda, topic for discussion",
+    taro: "会議で話し合うテーマのこと。友達同士で使うと少し大げさで、面白い効果があります。" },
+  kakushigei: { word: "隠し芸", reading: "かくしげい", en: "hidden talent, party trick",
+    taro: "宴会などで披露する特技。「隠し」＋「芸」の複合語です。" },
+  perori: { word: "ペロリと", reading: "オノマトペ", en: "(eat) in one gulp, easily",
+    taro: "軽々と食べきる様子。「3個ペロリと食べる」＝3個をあっという間に食べる。" },
+  shukudai: { word: "宿題", reading: "しゅくだい", en: "homework",
+    taro: "学校の宿題だけでなく、「次までに考えてくること」の意味でも使います。" },
+};
+
+const LINES = [
+  { t: 10, text: '寒くなったね。' },
+  { t: 11, text: 'ねえ、寒いね。<v id="sukkari">すっかり</v>冬。' },
+  { t: 14, text: '明日もっと寒いらしいよ。' },
+  { t: 15, text: 'ええ。' },
+  { t: 17, text: 'かなちゃん来ないね。' },
+  { t: 18, text: 'ねえ、まだ来ないね。' },
+  { t: 19, text: 'あ、来た。かなちゃん。' },
+  { t: 21, text: 'ごめんごめん、<v id="omatase">お待たせ</v>。' },
+  { t: 22, text: 'なんか今日いつもより<v id="oshare">おしゃれ</v>じゃん。' },
+  { t: 24, text: '髪切った？' },
+  { t: 25, text: 'ないんだもん。' },
+  { t: 27, text: 'うーん、じゃあホットコーヒーにしようかな。' },
+  { t: 29, text: 'ホットコーヒー。' },
+  { t: 30, text: '髪は切ってません。' },
+  { t: 33, text: 'しん。' },
+  { t: 34, text: 'じゃあ<v id="nobiru">伸びた</v>。' },
+  { t: 35, text: 'そりゃ伸びるでしょ、生きてんだから。' },
+  { t: 38, text: 'はいはい、じゃあそんな話は<v id="sateoki">さておき</v>、早速今日の<v id="gidai">議題</v>ですけど。' },
+  { t: 43, text: 'いよいよこの季節がやってきました。' },
+  { t: 46, text: 'ももくり2024。' },
+  { t: 49, text: 'よし、やってやりましょうか。' },
+  { t: 51, text: 'イエーイ！イエーイ！' },
+  { t: 55, text: 'で、何しますか？' },
+  { t: 59, text: '<v id="kakushigei">隠し芸</v>？' },
+  { t: 61, text: 'もうやった。' },
+  { t: 65, text: 'あ、個体は？' },
+  { t: 67, text: 'もうやった。' },
+  { t: 68, text: '安心してください、書いてますよ。' },
+  { t: 71, text: 'それもやった。' },
+  { t: 77, text: 'は、手品。' },
+  { t: 78, text: 'やりすぎ。' },
+  { t: 81, text: 'なんか考えようか。' },
+  { t: 83, text: 'そうだな。' },
+  { t: 85, text: '何がいいかな。' },
+  { t: 87, text: 'じゃあやっぱ冬だけど、真夏みたいにして。' },
+  { t: 90, text: '真夏のクリスマスみたいな。' },
+  { t: 92, text: 'やったー！' },
+  { t: 96, text: 'あー、食べた食べた。' },
+  { t: 98, text: '相変わらず何も決まらなかったけど、美味しかったね。' },
+  { t: 103, text: 'ねえ、食べ美味しかったな。まさか3個<v id="perori">ペロリと</v>食べれるなんてね。' },
+  { t: 107, text: 'じゃあ今日の<v id="shukudai">宿題</v>、ももくり2024、みんなちゃんと考えてこようね。' },
+  { t: 111, text: 'はい。' },
+  { t: 112, text: 'じゃあ帰ろ。' },
+  { t: 113, text: '帰ろ。' },
+  { t: 114, text: '帰ろ。' },
+];
+
+/* ── テロップDOM生成 ─────────────── */
+const transcript = document.getElementById('transcript');
+const fmt = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+
+LINES.forEach((line, i) => {
+  const el = document.createElement('div');
+  el.className = 'line';
+  el.tabIndex = 0;
+  el.role = 'button';
+  el.dataset.start = line.t;
+  el.dataset.end = (LINES[i+1]?.t ?? line.t + 4);
+  el.innerHTML = `<span class="time sans">${fmt(line.t)}</span><span class="text">${
+    line.text.replace(/<v id="([^"]+)">([^<]+)<\/v>/g,
+      '<span class="vocab" data-vocab-id="$1" tabindex="0">$2</span>')
+  }</span>`;
+  transcript.appendChild(el);
+});
+
+/* ── YouTube IFrame API ─────────────── */
+let player, ready = false;
+const tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+document.head.appendChild(tag);
+
+window.onYouTubeIframeAPIReady = () => {
+  player = new YT.Player('player', {
+    videoId: '275wxmjboKM',
+    playerVars: { rel: 0, playsinline: 1 },
+    events: { onReady: () => { ready = true; } }
+  });
+};
+
+/* ── クリック → シーク ─────────────── */
+transcript.addEventListener('click', e => {
+  if (e.target.closest('.vocab')) return; // 語彙クリックはポップアップ優先
+  const line = e.target.closest('.line');
+  if (line && ready) {
+    player.seekTo(Number(line.dataset.start), true);
+    player.playVideo();
+  }
+});
+transcript.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.classList.contains('line') && ready) {
+    player.seekTo(Number(e.target.dataset.start), true);
+    player.playVideo();
+  }
+});
+
+/* ── 再生時間 → ハイライト＆自動スクロール ── */
+let follow = true;
+const followBtn = document.getElementById('followBtn');
+followBtn.addEventListener('click', () => {
+  follow = !follow;
+  followBtn.setAttribute('aria-pressed', follow);
+  followBtn.textContent = follow ? '● 自動追従 ON' : '○ 自動追従 OFF';
+});
+
+let activeEl = null;
+setInterval(() => {
+  if (!ready || player.getPlayerState() !== YT.PlayerState.PLAYING) return;
+  const t = player.getCurrentTime();
+  const lines = transcript.children;
+  let hit = null;
+  for (const el of lines) {
+    if (t >= el.dataset.start && t < el.dataset.end) { hit = el; break; }
+  }
+  if (hit !== activeEl) {
+    activeEl?.removeAttribute('data-active');
+    activeEl = hit;
+    if (hit) {
+      hit.setAttribute('data-active', '');
+      if (follow) hit.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+}, 250);
+
+/* ── 語彙ポップアップ ─────────────── */
+const popup = document.getElementById('popup');
+function showPopup(target) {
+  const v = VOCAB[target.dataset.vocabId];
+  if (!v) return;
+  popup.innerHTML = `
+    <div><span class="word">${v.word}</span><span class="reading">${v.reading}</span></div>
+    <div class="en">${v.en}</div>
+    <div class="taro">${v.taro}</div>`;
+  const r = target.getBoundingClientRect();
+  popup.classList.add('show');
+  const pw = popup.offsetWidth;
+  let x = r.left + r.width/2 - pw/2;
+  x = Math.max(8, Math.min(x, innerWidth - pw - 8));
+  let y = r.bottom + 8;
+  if (y + popup.offsetHeight > innerHeight - 8) y = r.top - popup.offsetHeight - 8;
+  popup.style.left = x + 'px';
+  popup.style.top = y + 'px';
+}
+document.addEventListener('click', e => {
+  const v = e.target.closest('.vocab');
+  if (v) { showPopup(v); e.stopPropagation(); }
+  else if (!e.target.closest('#popup')) popup.classList.remove('show');
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') popup.classList.remove('show');
+  if (e.key === 'Enter' && e.target.classList?.contains('vocab')) showPopup(e.target);
+});
+window.addEventListener('scroll', () => popup.classList.remove('show'), { passive: true });
+</script>
+</body>
+</html>
