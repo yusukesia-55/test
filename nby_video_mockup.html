@@ -131,6 +131,16 @@
   }
   .line .text { text-wrap: pretty; }
 
+  /* 英訳行 */
+  .line .en {
+    display: block;
+    font-size: var(--step--1);
+    color: var(--muted);
+    line-height: 1.55;
+    margin-block-start: 0.1rem;
+  }
+  body[data-en="off"] .line .en { display: none; }
+
   /* 現在再生中の行 */
   .line[data-active] {
     background: var(--accent-soft);
@@ -219,6 +229,7 @@
       <button aria-pressed="true">N3</button>
       <button aria-pressed="false">N2</button>
       <button aria-pressed="false">N1</button>
+      <button id="enBtn" aria-pressed="true" style="margin-inline-start:auto">英訳</button>
     </div>
   </div>
 
@@ -260,51 +271,51 @@ const VOCAB = {
 };
 
 const LINES = [
-  { t: 10, text: '寒くなったね。' },
-  { t: 11, text: 'ねえ、寒いね。<v id="sukkari">すっかり</v>冬。' },
-  { t: 14, text: '明日もっと寒いらしいよ。' },
-  { t: 15, text: 'ええ。' },
-  { t: 17, text: 'かなちゃん来ないね。' },
-  { t: 18, text: 'ねえ、まだ来ないね。' },
-  { t: 19, text: 'あ、来た。かなちゃん。' },
-  { t: 21, text: 'ごめんごめん、<v id="omatase">お待たせ</v>。' },
-  { t: 22, text: 'なんか今日いつもより<v id="oshare">おしゃれ</v>じゃん。' },
-  { t: 24, text: '髪切った？' },
-  { t: 25, text: 'ないんだもん。' },
-  { t: 27, text: 'うーん、じゃあホットコーヒーにしようかな。' },
-  { t: 29, text: 'ホットコーヒー。' },
-  { t: 30, text: '髪は切ってません。' },
-  { t: 33, text: 'しん。' },
-  { t: 34, text: 'じゃあ<v id="nobiru">伸びた</v>。' },
-  { t: 35, text: 'そりゃ伸びるでしょ、生きてんだから。' },
-  { t: 38, text: 'はいはい、じゃあそんな話は<v id="sateoki">さておき</v>、早速今日の<v id="gidai">議題</v>ですけど。' },
-  { t: 43, text: 'いよいよこの季節がやってきました。' },
-  { t: 46, text: 'ももくり2024。' },
-  { t: 49, text: 'よし、やってやりましょうか。' },
-  { t: 51, text: 'イエーイ！イエーイ！' },
-  { t: 55, text: 'で、何しますか？' },
-  { t: 59, text: '<v id="kakushigei">隠し芸</v>？' },
-  { t: 61, text: 'もうやった。' },
-  { t: 65, text: 'あ、個体は？' },
-  { t: 67, text: 'もうやった。' },
-  { t: 68, text: '安心してください、書いてますよ。' },
-  { t: 71, text: 'それもやった。' },
-  { t: 77, text: 'は、手品。' },
-  { t: 78, text: 'やりすぎ。' },
-  { t: 81, text: 'なんか考えようか。' },
-  { t: 83, text: 'そうだな。' },
-  { t: 85, text: '何がいいかな。' },
-  { t: 87, text: 'じゃあやっぱ冬だけど、真夏みたいにして。' },
-  { t: 90, text: '真夏のクリスマスみたいな。' },
-  { t: 92, text: 'やったー！' },
-  { t: 96, text: 'あー、食べた食べた。' },
-  { t: 98, text: '相変わらず何も決まらなかったけど、美味しかったね。' },
-  { t: 103, text: 'ねえ、食べ美味しかったな。まさか3個<v id="perori">ペロリと</v>食べれるなんてね。' },
-  { t: 107, text: 'じゃあ今日の<v id="shukudai">宿題</v>、ももくり2024、みんなちゃんと考えてこようね。' },
-  { t: 111, text: 'はい。' },
-  { t: 112, text: 'じゃあ帰ろ。' },
-  { t: 113, text: '帰ろ。' },
-  { t: 114, text: '帰ろ。' },
+  { t: 10, text: '寒くなったね。', en: "It's gotten cold, hasn't it?" },
+  { t: 11, text: 'ねえ、寒いね。<v id="sukkari">すっかり</v>冬。', en: "Yeah, so cold. It's completely winter now." },
+  { t: 14, text: '明日もっと寒いらしいよ。', en: "I heard it'll be even colder tomorrow." },
+  { t: 15, text: 'ええ。', en: "No way." },
+  { t: 17, text: 'かなちゃん来ないね。', en: "Kana-chan isn't here yet." },
+  { t: 18, text: 'ねえ、まだ来ないね。', en: "Yeah, still not here." },
+  { t: 19, text: 'あ、来た。かなちゃん。', en: "Oh, there she is. Kana-chan!" },
+  { t: 21, text: 'ごめんごめん、<v id="omatase">お待たせ</v>。', en: "Sorry, sorry! Thanks for waiting." },
+  { t: 22, text: 'なんか今日いつもより<v id="oshare">おしゃれ</v>じゃん。', en: "You look more stylish than usual today." },
+  { t: 24, text: '髪切った？', en: "Did you cut your hair?" },
+  { t: 25, text: 'ないんだもん。', en: "I didn't, though." },
+  { t: 27, text: 'うーん、じゃあホットコーヒーにしようかな。', en: "Hmm, I think I'll go with a hot coffee." },
+  { t: 29, text: 'ホットコーヒー。', en: "A hot coffee?!" },
+  { t: 30, text: '髪は切ってません。', en: "I did not cut my hair." },
+  { t: 33, text: 'しん。', en: "(Silence.)" },
+  { t: 34, text: 'じゃあ<v id="nobiru">伸びた</v>。', en: "Then... it grew." },
+  { t: 35, text: 'そりゃ伸びるでしょ、生きてんだから。', en: "Of course it grew. I'm alive, you know." },
+  { t: 38, text: 'はいはい、じゃあそんな話は<v id="sateoki">さておき</v>、早速今日の<v id="gidai">議題</v>ですけど。', en: "Okay, okay. Setting that aside, on to today's agenda." },
+  { t: 43, text: 'いよいよこの季節がやってきました。', en: "That time of year is finally here." },
+  { t: 46, text: 'ももくり2024。', en: "Momokuri 2024!" },
+  { t: 49, text: 'よし、やってやりましょうか。', en: "Alright, let's do this!" },
+  { t: 51, text: 'イエーイ！イエーイ！', en: "Yay! Yay!" },
+  { t: 55, text: 'で、何しますか？', en: "So... what should we do?" },
+  { t: 59, text: '<v id="kakushigei">隠し芸</v>？', en: "A party trick?" },
+  { t: 61, text: 'もうやった。', en: "We already did that." },
+  { t: 65, text: 'あ、個体は？', en: "Oh, what about a solo act?" },
+  { t: 67, text: 'もうやった。', en: "Did that too." },
+  { t: 68, text: '安心してください、書いてますよ。', en: "Don't worry, I've got it written down." },
+  { t: 71, text: 'それもやった。', en: "Did that one too." },
+  { t: 77, text: 'は、手品。', en: "How about... magic tricks?" },
+  { t: 78, text: 'やりすぎ。', en: "Way too many times." },
+  { t: 81, text: 'なんか考えようか。', en: "Let's think of something." },
+  { t: 83, text: 'そうだな。', en: "Yeah, let's." },
+  { t: 85, text: '何がいいかな。', en: "What would be good?" },
+  { t: 87, text: 'じゃあやっぱ冬だけど、真夏みたいにして。', en: "Okay, so it's winter, but let's make it feel like midsummer." },
+  { t: 90, text: '真夏のクリスマスみたいな。', en: "Like a midsummer Christmas." },
+  { t: 92, text: 'やったー！', en: "Yay!" },
+  { t: 96, text: 'あー、食べた食べた。', en: "Ahh, that was a good meal." },
+  { t: 98, text: '相変わらず何も決まらなかったけど、美味しかったね。', en: "As usual, we didn't decide anything, but it was delicious." },
+  { t: 103, text: 'ねえ、食べ美味しかったな。まさか3個<v id="perori">ペロリと</v>食べれるなんてね。', en: "Yeah, so good. Can't believe I polished off three of them." },
+  { t: 107, text: 'じゃあ今日の<v id="shukudai">宿題</v>、ももくり2024、みんなちゃんと考えてこようね。', en: "So, homework: everyone bring ideas for Momokuri 2024, okay?" },
+  { t: 111, text: 'はい。', en: "Okay." },
+  { t: 112, text: 'じゃあ帰ろ。', en: "Alright, let's head home." },
+  { t: 113, text: '帰ろ。', en: "Let's go." },
+  { t: 114, text: '帰ろ。', en: "Home time." },
 ];
 
 /* ── テロップDOM生成 ─────────────── */
@@ -321,7 +332,7 @@ LINES.forEach((line, i) => {
   el.innerHTML = `<span class="time sans">${fmt(line.t)}</span><span class="text">${
     line.text.replace(/<v id="([^"]+)">([^<]+)<\/v>/g,
       '<span class="vocab" data-vocab-id="$1" tabindex="0">$2</span>')
-  }</span>`;
+  }<span class="en sans">${line.en}</span></span>`;
   transcript.appendChild(el);
 });
 
@@ -362,6 +373,14 @@ followBtn.addEventListener('click', () => {
   follow = !follow;
   followBtn.setAttribute('aria-pressed', follow);
   followBtn.textContent = follow ? '● 自動追従 ON' : '○ 自動追従 OFF';
+});
+
+/* ── 英訳オン・オフ ─────────────── */
+const enBtn = document.getElementById('enBtn');
+enBtn.addEventListener('click', () => {
+  const turningOff = document.body.dataset.en !== 'off';
+  document.body.dataset.en = turningOff ? 'off' : 'on';
+  enBtn.setAttribute('aria-pressed', String(!turningOff));
 });
 
 let activeEl = null;
@@ -415,4 +434,3 @@ window.addEventListener('scroll', () => popup.classList.remove('show'), { passiv
 </script>
 </body>
 </html>
-
