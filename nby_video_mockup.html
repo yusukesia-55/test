@@ -350,19 +350,31 @@ window.onYouTubeIframeAPIReady = () => {
   });
 };
 
-/* ── クリック → シーク ─────────────── */
-transcript.addEventListener('click', e => {
-  if (e.target.closest('.vocab')) return; // 語彙クリックはポップアップ優先
-  const line = e.target.closest('.line');
-  if (line && ready) {
+/* ── クリック → シーク／一時停止 ─────── */
+function handleLineClick(line) {
+  if (!ready) return;
+  if (line === activeEl) {
+    // 選択中の行：再生中なら止める（訳の確認）、停止中なら行頭から再生
+    if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+      player.pauseVideo();
+    } else {
+      player.seekTo(Number(line.dataset.start), true);
+      player.playVideo();
+    }
+  } else {
+    // 選択されていない行：その位置に移動して再生
     player.seekTo(Number(line.dataset.start), true);
     player.playVideo();
   }
+}
+transcript.addEventListener('click', e => {
+  if (e.target.closest('.vocab')) return; // 語彙クリックはポップアップ優先
+  const line = e.target.closest('.line');
+  if (line) handleLineClick(line);
 });
 transcript.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && e.target.classList.contains('line') && ready) {
-    player.seekTo(Number(e.target.dataset.start), true);
-    player.playVideo();
+  if (e.key === 'Enter' && e.target.classList.contains('line')) {
+    handleLineClick(e.target);
   }
 });
 
