@@ -195,6 +195,66 @@
   }
   .follow-toggle[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 
+  /* ── AI先生レッスン ───────────── */
+  .sensei {
+    margin: 3rem var(--space) 0;
+    padding: 1.5rem clamp(1rem, 4vw, 1.75rem);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+  .sensei .sensei-tag {
+    font-size: var(--step--1);
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    font-weight: 600;
+  }
+  .sensei h2 {
+    font-size: var(--step-1);
+    font-weight: 600;
+    margin-block: 0.3rem 0.6rem;
+    text-wrap: balance;
+  }
+  .sensei > p { font-size: var(--step-0); }
+  .sensei .pattern {
+    margin-block-start: 1.75rem;
+    padding-block-start: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+  .sensei .pattern h3 {
+    font-size: var(--step-0);
+    font-weight: 600;
+  }
+  .sensei .pattern h3 .num {
+    color: var(--accent);
+    margin-inline-end: 0.5em;
+  }
+  .sensei .example {
+    margin-block: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    background: var(--paper);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .sensei .example .quote { display: block; }
+  .sensei .example .quote b { color: var(--vocab); font-weight: 600; }
+  .sensei .seek {
+    font-family: "SF Mono", "Consolas", monospace;
+    font-size: var(--step--1);
+    color: var(--accent);
+    cursor: pointer;
+    text-decoration: underline dotted;
+    text-underline-offset: 0.2em;
+    margin-inline-end: 0.6em;
+    white-space: nowrap;
+  }
+  .sensei .try {
+    font-size: var(--step--1);
+    color: var(--muted);
+    margin-block-start: 0.5rem;
+  }
+  .sensei .try::before { content: "使ってみよう ▸ "; color: var(--accent); font-weight: 600; }
+
   @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after { transition: none !important; }
   }
@@ -229,6 +289,48 @@
   </div>
 
   <section class="transcript" id="transcript" aria-label="テロップ"></section>
+
+  <section class="sensei sans" aria-label="AI先生のレッスン">
+    <span class="sensei-tag">AI先生のレッスン</span>
+    <h2>この会見の「話し言葉」を解剖する — 3つの文型</h2>
+    <p>今日の教材は野球の会見ですが、ここで使われている話し方は、会議でもインタビューでも毎日使われている「生の英語」の型です。辞書には載らない3つを取り上げます。タイムスタンプを押すと、その場面に飛べます。</p>
+
+    <div class="pattern">
+      <h3><span class="num">1</span>「あなた」ではない you — 総称のyou</h3>
+      <div class="example">
+        <span class="quote"><span class="seek" data-t="44">00:44</span>Speaking as a hitter, <b>you</b> kind of have a better idea of what guys are trying to do to <b>you</b>.</span>
+      </div>
+      <div class="example">
+        <span class="quote"><span class="seek" data-t="79">01:19</span><b>You</b> feel as if <b>you</b> guys are on the same page.</span>
+      </div>
+      <p>ここのyouは「あなた」ではありません。「（打者というものは）誰でも」という<strong>一般論のyou</strong>です。日本語の「〜ものだ」に近い。ラッシング捕手は自分の話をしているのに youを使う——話し言葉では I より youで一般化して語るほうが自然な場面が多いのです。「あなた」と訳すと会話が成立しなくなる、日本語話者の最頻出の誤読ポイントです。</p>
+      <p class="try">自分の経験を一般論として話すとき、"When you face the same pitcher twice, you learn a lot." のようにyouで言い換えてみましょう。</p>
+    </div>
+
+    <div class="pattern">
+      <h3><span class="num">2</span>断言をやわらげる kind of — 話し言葉の緩衝材</h3>
+      <div class="example">
+        <span class="quote"><span class="seek" data-t="79">01:19</span>It's <b>kind of</b> like a boost of confidence.</span>
+      </div>
+      <div class="example">
+        <span class="quote"><span class="seek" data-t="156">02:36</span>It <b>kind of</b>, we have to lean on Mark a little bit.</span>
+      </div>
+      <p>この会見だけで kind of は7回登場します。意味はほぼゼロ。日本語の「なんか」「ちょっと」と同じ<strong>緩衝材</strong>で、断言を避けて柔らかくする働きです。教科書は教えませんが、これがないと英語は尋問のように硬く聞こえます。聞き取りでは「意味を探さず、読み飛ばす」のが正解です。</p>
+      <p class="try">感想を言うとき、"It was kind of tough." と一度ぼかしてみる。断定を1段やわらげる感覚をつかみましょう。</p>
+    </div>
+
+    <div class="pattern">
+      <h3><span class="num">3</span>評価は過去形で — I thought 〜</h3>
+      <div class="example">
+        <span class="quote"><span class="seek" data-t="53">00:53</span><b>I thought</b> he threw the ball really well.</span>
+      </div>
+      <div class="example">
+        <span class="quote"><span class="seek" data-t="84">01:24</span><b>I think</b> he had a very quality start.</span>
+      </div>
+      <p>試合を振り返る場面では <strong>I thought + 過去形</strong>が評価の定型です。「（観ていて）〜だと思った」。一方、01:24のI thinkは「今この場での判断」。日本語話者はすべてI thinkで話しがちですが、ネイティブは<strong>体験の評価はthought、現在の意見はthink</strong>と自然に使い分けます。この会見はその使い分けの見本市です。</p>
+      <p class="try">今日あった出来事をひとつ、"I thought 〜" で評価してみましょう。"I thought the meeting went well." のように。</p>
+    </div>
+  </section>
 </main>
 
 <div id="popup" role="tooltip"></div>
@@ -389,6 +491,16 @@ setInterval(() => {
     }
   }
 }, 250);
+
+/* ── AI先生の例文 → 動画シーク ─────── */
+document.querySelectorAll('.sensei .seek').forEach(el => {
+  el.addEventListener('click', () => {
+    if (!ready) return;
+    player.seekTo(Number(el.dataset.t), true);
+    player.playVideo();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
 
 /* ── 語彙ポップアップ ─────────────── */
 const popup = document.getElementById('popup');
