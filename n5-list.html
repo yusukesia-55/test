@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N5 漢字・語彙リスト — Nihongo by Yusuke</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Shippori+Mincho:wght@600;800&family=Yusei+Magic&display=swap" rel="stylesheet">
+<style>
+@layer reset, base, components, utilities;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+  input { font: inherit; }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --vermillion: oklch(0.58 0.21 33);          /* 朱 — 看板・鳥居の赤 */
+    --ink: oklch(0.23 0.015 260);               /* 墨 */
+    --bg: oklch(0.975 0.006 85);                /* 生成り */
+    --surface: oklch(0.995 0.003 85);
+    --muted: color-mix(in oklch, var(--ink) 52%, var(--bg));
+    --border: color-mix(in oklch, var(--ink) 14%, transparent);
+    --done: oklch(0.55 0.11 155);               /* 撮影済みの緑 */
+    --done-bg: color-mix(in oklch, var(--done) 8%, var(--surface));
+
+    --font-ui: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
+    --font-mincho: "Shippori Mincho", "Hiragino Mincho ProN", serif;
+    --font-hand: "Yusei Magic", sans-serif;
+
+    --step--1: clamp(0.72rem, 0.7rem + 0.2vw, 0.8rem);
+    --step-0: clamp(0.9rem, 0.85rem + 0.3vw, 1rem);
+    --step-1: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+    --step-3: clamp(1.7rem, 1.4rem + 1.6vw, 2.4rem);
+    --space: clamp(0.75rem, 0.5rem + 1.5vw, 1.25rem);
+  }
+  body {
+    font-family: var(--font-ui);
+    font-size: var(--step-0);
+    background: var(--bg);
+    background-image: radial-gradient(color-mix(in oklch, var(--ink) 4%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: color-mix(in oklch, var(--vermillion) 25%, transparent); }
+}
+
+@layer components {
+  .wrap { max-width: 44rem; margin-inline: auto; padding: var(--space); padding-block-end: 6rem; }
+
+  /* ── ヘッダー ── */
+  header { padding-block: calc(var(--space) * 1.2) var(--space); }
+  .brand {
+    font-size: var(--step--1);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--vermillion);
+    font-weight: 700;
+  }
+  h1 {
+    font-family: var(--font-mincho);
+    font-weight: 800;
+    font-size: var(--step-3);
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+    text-wrap: balance;
+    margin-block-start: 0.35rem;
+  }
+  h1 .accent { color: var(--vermillion); }
+  .lede { color: var(--muted); font-size: var(--step--1); margin-block-start: 0.5rem; max-width: 34rem; }
+
+  /* ── 進捗バー ── */
+  .progress {
+    margin-block-start: var(--space);
+    border: 1.5px solid var(--ink);
+    background: var(--surface);
+    padding: 0.7rem 0.9rem;
+    display: grid;
+    gap: 0.45rem;
+    box-shadow: 4px 4px 0 color-mix(in oklch, var(--ink) 85%, transparent);
+  }
+  .progress-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
+  .progress-label { font-size: var(--step--1); font-weight: 700; letter-spacing: 0.08em; }
+  .progress-num { font-family: var(--font-mincho); font-weight: 800; font-size: var(--step-1); }
+  .progress-num .of { font-size: var(--step--1); color: var(--muted); font-family: var(--font-ui); font-weight: 500; }
+  .bar { height: 8px; background: color-mix(in oklch, var(--ink) 8%, transparent); overflow: hidden; }
+  .bar-fill { height: 100%; width: 0%; background: var(--vermillion); transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+  /* ── タブ ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-block-start: calc(var(--space) * 1.4);
+    border: 1.5px solid var(--ink);
+    background: var(--surface);
+    position: sticky;
+    top: 0.5rem;
+    z-index: 20;
+    box-shadow: 0 6px 16px -8px color-mix(in oklch, var(--ink) 40%, transparent);
+  }
+  .tab {
+    flex: 1;
+    padding: 0.65rem 0.5rem;
+    font-weight: 700;
+    font-size: var(--step-0);
+    text-align: center;
+    letter-spacing: 0.05em;
+    border-inline-end: 1.5px solid var(--ink);
+    transition: background 0.15s, color 0.15s;
+    min-height: 44px;
+  }
+  .tab:last-child { border-inline-end: none; }
+  .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+  .tab .count { font-size: var(--step--1); font-weight: 500; opacity: 0.65; margin-inline-start: 0.25em; }
+  .tab:focus-visible { outline: 3px solid var(--vermillion); outline-offset: -3px; }
+
+  /* ── ツールバー(検索+フィルタ) ── */
+  .toolbar { margin-block-start: var(--space); display: grid; gap: 0.6rem; }
+  .search {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    font-size: 16px; /* iOSズーム防止 */
+  }
+  .search:focus-visible { outline: 2px solid var(--vermillion); outline-offset: 1px; border-color: transparent; }
+  .filters { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .chip {
+    padding: 0.35rem 0.75rem;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    font-size: var(--step--1);
+    font-weight: 500;
+    min-height: 32px;
+    transition: all 0.15s;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--vermillion);
+    border-color: var(--vermillion);
+    color: white;
+    font-weight: 700;
+  }
+  .chip:focus-visible { outline: 2px solid var(--vermillion); outline-offset: 2px; }
+
+  /* ── カテゴリーチップ(語彙) ── */
+  .cats {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding-block-end: 0.3rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .cats::-webkit-scrollbar { display: none; }
+  .cats .chip { white-space: nowrap; flex-shrink: 0; }
+
+  /* ── セクション見出し ── */
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-block: calc(var(--space) * 1.6) 0.7rem;
+    padding-block-end: 0.4rem;
+    border-block-end: 1.5px solid var(--ink);
+  }
+  .sec-head h2 { font-family: var(--font-mincho); font-weight: 800; font-size: var(--step-1); }
+  .sec-head .sec-count { font-size: var(--step--1); color: var(--muted); }
+
+  /* ── 漢字カード ── */
+  .kanji-grid { display: grid; gap: 0.6rem; }
+  .kanji-card {
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    padding: 0.8rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.8rem;
+    align-items: start;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .kanji-card:has(.check:checked) { background: var(--done-bg); border-color: color-mix(in oklch, var(--done) 45%, transparent); }
+  .kanji-faces { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; }
+  .face-main {
+    font-family: var(--font-mincho);
+    font-weight: 800;
+    font-size: 2.6rem;
+    line-height: 1.1;
+  }
+  .face-alts { display: flex; gap: 0.35rem; color: var(--muted); }
+  .face-alts span { font-size: 1.05rem; line-height: 1.2; }
+  .face-go { font-family: var(--font-ui); font-weight: 900; }
+  .face-hand { font-family: var(--font-hand); }
+  .kanji-body { min-width: 0; }
+  .kanji-reading { font-size: var(--step--1); color: var(--muted); letter-spacing: 0.03em; }
+  .kanji-meaning { font-weight: 700; font-size: var(--step-0); }
+  .kanji-hint {
+    margin-block-start: 0.35rem;
+    font-size: var(--step--1);
+    color: var(--ink);
+    background: color-mix(in oklch, var(--vermillion) 7%, transparent);
+    border-inline-start: 3px solid var(--vermillion);
+    padding: 0.25rem 0.5rem;
+    line-height: 1.5;
+  }
+  .kanji-hint::before { content: "📷 "; }
+
+  /* ── チェックボックス ── */
+  .check-wrap { display: grid; place-items: center; align-self: center; }
+  .check {
+    appearance: none;
+    width: 30px; height: 30px;
+    border: 2px solid var(--ink);
+    background: var(--surface);
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .check:checked { background: var(--done); border-color: var(--done); }
+  .check:checked::before {
+    content: "";
+    width: 14px; height: 8px;
+    border-inline-start: 3px solid white;
+    border-block-end: 3px solid white;
+    transform: rotate(-45deg) translateY(-2px);
+  }
+  .check:focus-visible { outline: 3px solid var(--vermillion); outline-offset: 2px; }
+
+  /* ── 語彙リスト ── */
+  .vocab-cat { margin-block-start: calc(var(--space) * 1.3); }
+  .vocab-cat-head {
+    display: flex; align-items: baseline; gap: 0.5rem;
+    padding: 0.45rem 0.7rem;
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .vocab-cat-head h3 { font-size: var(--step-0); font-weight: 700; letter-spacing: 0.06em; }
+  .vocab-cat-head .n { font-size: var(--step--1); opacity: 0.7; }
+  .vocab-rows { border: 1.5px solid var(--border); border-block-start: none; background: var(--surface); }
+  .vocab-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.6rem;
+    align-items: center;
+    padding: 0.55rem 0.7rem;
+    border-block-end: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .vocab-row:last-child { border-block-end: none; }
+  .vocab-row:has(.check:checked) { background: var(--done-bg); }
+  .vocab-row .check { width: 26px; height: 26px; }
+  .vocab-row .check:checked::before { width: 12px; height: 7px; }
+  .vocab-main { min-width: 0; }
+  .vocab-word { font-weight: 700; font-size: var(--step-0); }
+  .vocab-word .cam { font-size: 0.8em; margin-inline-start: 0.3em; }
+  .vocab-sub { font-size: var(--step--1); color: var(--muted); }
+  .vocab-sub .en { margin-inline-start: 0.5em; }
+
+  /* ── 空状態 ── */
+  .empty { text-align: center; color: var(--muted); padding-block: 2.5rem; font-size: var(--step--1); display: none; }
+
+  /* ── フッター ── */
+  footer {
+    margin-block-start: calc(var(--space) * 2);
+    padding-block-start: var(--space);
+    border-block-start: 1.5px solid var(--border);
+    font-size: var(--step--1);
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .reset-btn {
+    font-size: var(--step--1);
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .reset-btn:focus-visible { outline: 2px solid var(--vermillion); outline-offset: 2px; }
+
+  .hidden { display: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { animation-duration: 0.01ms !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="brand">Nihongo by Yusuke — 素材収集用</p>
+  <h1>N5 漢字<span class="accent">108</span>字・語彙<span class="accent">440</span>語</h1>
+  <p class="lede">街で撮る漢字・語彙のチェックリスト。漢字は明朝・ゴシック・手書き風の3書体で表示(実物のフォント揺れに備える)。チェックはこの端末に保存されます。</p>
+</header>
+
+<div class="progress" role="status">
+  <div class="progress-row">
+    <span class="progress-label" id="progressLabel">撮影済み</span>
+    <span class="progress-num"><span id="doneCount">0</span><span class="of"> / <span id="totalCount">0</span></span></span>
+  </div>
+  <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+</div>
+
+<div class="tabs" role="tablist" aria-label="リスト切り替え">
+  <button class="tab" role="tab" id="tabKanji" aria-selected="true" aria-controls="panelKanji">漢字<span class="count" id="kanjiTabCount"></span></button>
+  <button class="tab" role="tab" id="tabVocab" aria-selected="false" aria-controls="panelVocab">語彙<span class="count" id="vocabTabCount"></span></button>
+</div>
+
+<div class="toolbar">
+  <input type="search" class="search" id="searchBox" placeholder="検索(漢字・読み・英語)" aria-label="検索">
+  <div class="filters" role="group" aria-label="撮影状態フィルタ">
+    <button class="chip" data-filter="all" aria-pressed="true">すべて</button>
+    <button class="chip" data-filter="todo" aria-pressed="false">未撮影</button>
+    <button class="chip" data-filter="done" aria-pressed="false">撮影済み</button>
+  </div>
+  <div class="cats hidden" id="catBar" role="group" aria-label="語彙カテゴリー"></div>
+</div>
+
+<main>
+  <section id="panelKanji" role="tabpanel" aria-labelledby="tabKanji">
+    <div class="sec-head"><h2>漢字</h2><span class="sec-count" id="kanjiShown"></span></div>
+    <div class="kanji-grid" id="kanjiGrid"></div>
+    <p class="empty" id="kanjiEmpty">該当なし</p>
+  </section>
+
+  <section id="panelVocab" role="tabpanel" aria-labelledby="tabVocab" class="hidden">
+    <div id="vocabList"></div>
+    <p class="empty" id="vocabEmpty">該当なし</p>
+  </section>
+</main>
+
+<footer>
+  <span>NGY 撮影リスト v1 — 2026.07</span>
+  <button class="reset-btn" id="resetBtn">チェックを全部リセット</button>
+</footer>
+
+</div>
+
+<script>
+/* ============ データ ============ */
+/* 漢字: [字, 読み, 意味(EN), 街での撮影例] */
+const KANJI = [
+["一","いち / ひと","one","値札「一つ100円」、一丁目の住所表示板"],
+["二","に / ふた","two","二丁目の街区表示、二階の案内"],
+["三","さん / み","three","三丁目、三番線ホーム標識"],
+["四","し・よん / よ","four","四つ角の交差点名、四番出口"],
+["五","ご / いつ","five","五差路の標識、五番街の商店街看板"],
+["六","ろく / む","six","六本木の駅名標、六号車の乗車位置"],
+["七","しち・なな","seven","七福神めぐりの幟、七味唐辛子のパッケージ"],
+["八","はち / や","eight","八百屋の看板、八重洲口の案内"],
+["九","きゅう・く","nine","九段下の駅名標、九号線の標識"],
+["十","じゅう / とお","ten","十字路標識、「十割そば」の看板"],
+["百","ひゃく","hundred","100円ショップの「百円」表示、百貨店"],
+["千","せん / ち","thousand","千円の値札、千代田区の区名標識"],
+["万","まん","ten thousand","「一万円」の価格表示、質屋の看板"],
+["円","えん","yen; circle","値札ならどこでも。手書きの「円」が狙い目"],
+["日","にち・ひ","day; sun","定休日の貼り紙、「本日営業」の札"],
+["月","げつ・つき","month; moon","月極駐車場の看板(定番)、月曜定休の表示"],
+["火","か / ひ","fire","「火気厳禁」の標識、消火栓の表示"],
+["水","すい / みず","water","「飲料水」の表示、水道局のマンホール"],
+["木","もく / き","tree; wood","木曜定休の貼り紙、材木店の看板"],
+["金","きん / かね","gold; money","金曜日の掲示、「換金」の看板"],
+["土","ど / つち","earth; soil","「土日祝休み」の営業案内"],
+["曜","よう","weekday","営業時間表の「月曜〜金曜」"],
+["年","ねん / とし","year","「創業50年」の老舗看板、年末年始の貼り紙"],
+["時","じ / とき","time; hour","営業時間「10時〜20時」の表示"],
+["分","ふん・ぶん","minute; part","「駅から徒歩5分」の不動産広告"],
+["半","はん","half","「9時半開店」、半額シール"],
+["間","かん / あいだ","interval","「営業時間」の掲示、時間貸駐車場"],
+["週","しゅう","week","「週刊誌」の中吊り、週替わりランチの黒板"],
+["今","こん / いま","now","「今月のおすすめ」、今週のセール品"],
+["毎","まい","every","「毎週火曜定休」、毎日営業の表示"],
+["何","なに・なん","what","看板では稀。教材用は合成でも可"],
+["先","せん / さき","previous; ahead","「この先行き止まり」の標識"],
+["午","ご","noon","「午前・午後」の診療時間表"],
+["前","ぜん / まえ","before; front","「駅前」の交差点名標識、午前の表示"],
+["後","ご / あと・うしろ","after; behind","「午後」の診療時間、「この後すぐ」"],
+["人","じん・にん / ひと","person","「一人前」のメニュー、「人身事故」掲示より飲食店が無難"],
+["男","だん / おとこ","man","トイレの「男」表示(定番)"],
+["女","じょ / おんな","woman","トイレの「女」表示(定番)"],
+["子","し / こ","child","「子供」の注意標識、菓子店の「〜子」"],
+["父","ふ / ちち","father","「父の日」の売り場POP(季節限定)"],
+["母","ぼ / はは","mother","「母の日」の売り場POP(季節限定)"],
+["友","ゆう / とも","friend","「友」の付く店名・居酒屋の品書き"],
+["名","めい / な","name","「名物」の幟、名刺屋の看板"],
+["生","せい / い・なま","life; raw","「生ビール」の赤提灯(最頻出)、生鮮食品売り場"],
+["学","がく / まな","study","「学校」の標識、学生割引の掲示"],
+["校","こう","school","小学校の門柱・通学路標識"],
+["山","さん / やま","mountain","登山道標識、山手線の駅名標、「〜山」の寺号"],
+["川","せん / かわ","river","河川名の標識(橋のたもと)、川の付く駅名"],
+["田","でん / た","rice field","田町・神田など駅名標、田んぼの案内板"],
+["天","てん","heaven; sky","「天ぷら」「天丼」の看板(最頻出)"],
+["気","き","spirit; air","「電気」の看板、「天気」より合わせ技で"],
+["雨","う / あめ","rain","「雨天中止」の掲示、傘立ての注意書き"],
+["空","くう / そら","sky; empty","駐車場の「空」表示(定番)、空港の案内"],
+["花","か / はな","flower","花屋の看板(定番)、生花の表示"],
+["魚","ぎょ / さかな","fish","鮮魚店の看板、寿司屋の湯呑み風装飾"],
+["犬","けん / いぬ","dog","「犬の散歩禁止」の看板、ペットショップ"],
+["上","じょう / うえ","up; above","「この上」の案内、屋上駐車場の表示"],
+["下","か / した","down; below","「地下」の入口表示、地下鉄の案内"],
+["中","ちゅう / なか","middle; inside","「営業中」の札(最頻出)、「準備中」"],
+["外","がい / そと","outside","「外出中」の札、屋外喫煙所の案内"],
+["右","う / みぎ","right","「右折禁止」標識、右側通行の掲示"],
+["左","さ / ひだり","left","「左折可」標識、左側通行の掲示"],
+["東","とう / ひがし","east","東口の駅案内、東京の「東」"],
+["西","せい / にし","west","西口の駅案内、関西方面の標識"],
+["南","なん / みなみ","south","南口の案内、南向き物件の不動産広告"],
+["北","ほく / きた","north","北口の案内、北海道物産展のPOP"],
+["口","こう / くち","mouth; exit","「入口」「出口」「北口」あらゆる出入口"],
+["出","しゅつ / で","exit; leave","「出口」の案内(定番)、出前の幟"],
+["入","にゅう / はい・い","enter","「入口」「入場無料」の掲示"],
+["行","こう / い","go","バスの行き先表示「〜行」、銀行の看板"],
+["来","らい / く","come","「いらっしゃいませ」より「来店」の掲示"],
+["帰","き / かえ","return","「お帰りなさい」の商店街フラッグ(稀)"],
+["休","きゅう / やす","rest","「定休日」「本日休業」の札(定番)"],
+["立","りつ / た","stand","「立入禁止」の標識(最頻出)、立ち食いそば"],
+["見","けん / み","see","「見本」の表示、内覧会の「見学自由」"],
+["聞","ぶん / き","hear; ask","新聞販売店の看板「〜新聞」"],
+["言","げん / い","say","「伝言板」(今は稀)、言問通りの標識"],
+["話","わ / はな","talk","「電話」の表示、公衆電話の案内"],
+["読","どく / よ","read","「読売新聞」の販売店看板"],
+["書","しょ / か","write","書店の看板、「教科書販売」の掲示"],
+["食","しょく / た","eat","「食堂」の看板(定番)、定食の品書き"],
+["飲","いん / の","drink","「飲み放題」の看板、自販機の「飲料」"],
+["買","ばい / か","buy","「買取」の看板(リサイクル店・金券店)"],
+["売","ばい / う","sell","「売り出し」の幟、「売地」の看板"],
+["会","かい / あ","meet","「会議室」の案内、会館の看板"],
+["社","しゃ","company; shrine","会社の看板、神社の社号標(両方撮ると面白い)"],
+["店","てん / みせ","shop","「本店」「支店」の看板、閉店セール"],
+["駅","えき","station","駅名標(定番中の定番)。複数フォント撮り比べ"],
+["電","でん","electricity","「電車」「電気」の看板、充電スポット"],
+["車","しゃ / くるま","car; vehicle","「駐車場」の看板、車両進入禁止"],
+["道","どう / みち","road","「国道」の標識、道路工事の掲示、書道教室"],
+["高","こう / たか","high; expensive","「高速道路」の標識、高校の門柱"],
+["安","あん / やす","cheap; safe","「激安」の値札(定番)、「安全第一」の工事現場"],
+["新","しん / あたら","new","「新発売」のPOP、「新装開店」の花輪"],
+["古","こ / ふる","old","「古本」の看板、古着屋、骨董市"],
+["大","だい / おお","big","「大売出し」の幟、大学の門柱、「大」盛り"],
+["小","しょう / ちい","small","小学校の標識、「小」サイズの券売機表示"],
+["長","ちょう / なが","long; chief","「店長おすすめ」のPOP、町内会長の掲示"],
+["多","た / おお","many","「品数多数」のPOP(やや稀)"],
+["少","しょう / すこ","few; little","「残りわずか・少々お待ちください」の掲示"],
+["白","はく / しろ","white","「白米」の食券、白線内側の駅アナウンス掲示"],
+["本","ほん / もと","book; origin","「本日」「日本」「本店」どこにでもある万能字"],
+["国","こく / くに","country","「国道」標識、「外国語対応」の掲示"],
+["語","ご","language","「日本語教室」の掲示、英語対応の案内"],
+["耳","じ / みみ","ear","耳鼻科の看板(定番)"],
+["目","もく / め","eye","眼科・「三丁目」の丁目表示、「お茶の目」より丁目"],
+["手","しゅ / て","hand","「お手洗い」の案内(定番)、手作りの幟"],
+["足","そく / あし","foot; leg","「足湯」の案内、整体院の看板"]
+];
+</script>
+<script>
+/* 語彙: カテゴリーごとに [語, 読み, 意味(EN), 撮影向き(1=街で撮れる)] */
+const VOCAB = [
+["数・時間", [
+["一つ〜十","ひとつ〜とお","counting things",1],
+["今日","きょう","today",1],
+["明日","あした","tomorrow",0],
+["昨日","きのう","yesterday",0],
+["今","いま","now",0],
+["朝","あさ","morning",1],
+["昼","ひる","noon; daytime",1],
+["夜","よる","night",1],
+["晩","ばん","evening",0],
+["午前","ごぜん","a.m.",1],
+["午後","ごご","p.m.",1],
+["毎日","まいにち","every day",1],
+["毎朝","まいあさ","every morning",0],
+["毎晩","まいばん","every night",0],
+["毎週","まいしゅう","every week",1],
+["今週","こんしゅう","this week",1],
+["来週","らいしゅう","next week",0],
+["先週","せんしゅう","last week",0],
+["今月","こんげつ","this month",1],
+["来月","らいげつ","next month",0],
+["先月","せんげつ","last month",0],
+["今年","ことし","this year",0],
+["来年","らいねん","next year",0],
+["去年","きょねん","last year",0],
+["時間","じかん","time; hour",1],
+["〜時","〜じ","o'clock",1],
+["〜分","〜ふん","minute",1],
+["半","はん","half past",1],
+["日曜日","にちようび","Sunday",1],
+["月曜日","げつようび","Monday",1],
+["火曜日","かようび","Tuesday",1],
+["水曜日","すいようび","Wednesday",1],
+["木曜日","もくようび","Thursday",1],
+["金曜日","きんようび","Friday",1],
+["土曜日","どようび","Saturday",1],
+["誕生日","たんじょうび","birthday",0],
+["時々","ときどき","sometimes",0],
+["いつ","いつ","when",0],
+["いつも","いつも","always",0]
+]],
+["人・家族", [
+["私","わたし","I",0],
+["人","ひと","person",0],
+["男","おとこ","man",1],
+["女","おんな","woman",1],
+["男の子","おとこのこ","boy",0],
+["女の子","おんなのこ","girl",0],
+["子ども","こども","child",1],
+["大人","おとな","adult",1],
+["家族","かぞく","family",0],
+["父","ちち","(my) father",0],
+["母","はは","(my) mother",0],
+["お父さん","おとうさん","father",0],
+["お母さん","おかあさん","mother",0],
+["兄","あに","(my) older brother",0],
+["姉","あね","(my) older sister",0],
+["弟","おとうと","younger brother",0],
+["妹","いもうと","younger sister",0],
+["おじいさん","おじいさん","grandfather",0],
+["おばあさん","おばあさん","grandmother",0],
+["友だち","ともだち","friend",0],
+["先生","せんせい","teacher",1],
+["学生","がくせい","student",1],
+["医者","いしゃ","doctor",1],
+["名前","なまえ","name",1],
+["皆さん","みなさん","everyone",0]
+]],
+["食べ物・飲み物", [
+["ごはん","ごはん","rice; meal",1],
+["朝ごはん","あさごはん","breakfast",1],
+["昼ごはん","ひるごはん","lunch",1],
+["晩ごはん","ばんごはん","dinner",1],
+["食べ物","たべもの","food",1],
+["飲み物","のみもの","drink",1],
+["水","みず","water",1],
+["お茶","おちゃ","tea",1],
+["紅茶","こうちゃ","black tea",1],
+["コーヒー","コーヒー","coffee",1],
+["牛乳","ぎゅうにゅう","milk",1],
+["ジュース","ジュース","juice",1],
+["お酒","おさけ","alcohol; sake",1],
+["ビール","ビール","beer",1],
+["肉","にく","meat",1],
+["牛肉","ぎゅうにく","beef",1],
+["豚肉","ぶたにく","pork",1],
+["鶏肉","とりにく","chicken",1],
+["魚","さかな","fish",1],
+["卵","たまご","egg",1],
+["野菜","やさい","vegetables",1],
+["果物","くだもの","fruit",1],
+["りんご","りんご","apple",1],
+["みかん","みかん","mandarin orange",1],
+["バナナ","バナナ","banana",1],
+["パン","パン","bread",1],
+["お米","おこめ","(uncooked) rice",1],
+["塩","しお","salt",1],
+["砂糖","さとう","sugar",1],
+["醤油","しょうゆ","soy sauce",1],
+["カレー","カレー","curry",1],
+["ラーメン","ラーメン","ramen",1],
+["そば","そば","soba noodles",1],
+["うどん","うどん","udon noodles",1],
+["寿司","すし","sushi",1],
+["弁当","べんとう","boxed lunch",1],
+["お菓子","おかし","sweets; snacks",1],
+["料理","りょうり","cooking; dish",1],
+["定食","ていしょく","set meal",1]
+]],
+["場所・建物", [
+["駅","えき","station",1],
+["学校","がっこう","school",1],
+["大学","だいがく","university",1],
+["病院","びょういん","hospital",1],
+["銀行","ぎんこう","bank",1],
+["郵便局","ゆうびんきょく","post office",1],
+["図書館","としょかん","library",1],
+["公園","こうえん","park",1],
+["店","みせ","shop",1],
+["スーパー","スーパー","supermarket",1],
+["デパート","デパート","department store",1],
+["本屋","ほんや","bookstore",1],
+["花屋","はなや","flower shop",1],
+["八百屋","やおや","greengrocer",1],
+["映画館","えいがかん","movie theater",1],
+["ホテル","ホテル","hotel",1],
+["会社","かいしゃ","company",1],
+["交番","こうばん","police box",1],
+["神社","じんじゃ","shrine",1],
+["お寺","おてら","temple",1],
+["プール","プール","pool",1],
+["レストラン","レストラン","restaurant",1],
+["食堂","しょくどう","cafeteria; diner",1],
+["喫茶店","きっさてん","coffee shop",1],
+["家","いえ・うち","house; home",0],
+["アパート","アパート","apartment",1],
+["部屋","へや","room",1],
+["台所","だいどころ","kitchen",0],
+["玄関","げんかん","entrance (of house)",1],
+["トイレ","トイレ","toilet",1],
+["お手洗い","おてあらい","restroom",1],
+["お風呂","おふろ","bath",1],
+["庭","にわ","garden",0],
+["教室","きょうしつ","classroom",1],
+["入口","いりぐち","entrance",1],
+["出口","でぐち","exit",1],
+["受付","うけつけ","reception",1],
+["エレベーター","エレベーター","elevator",1],
+["階段","かいだん","stairs",1],
+["道","みち","road",1],
+["橋","はし","bridge",1],
+["町","まち","town",1],
+["村","むら","village",1],
+["国","くに","country",0],
+["外国","がいこく","foreign country",0],
+["場所","ばしょ","place",0],
+["ところ","ところ","place",0]
+]],
+["交通", [
+["電車","でんしゃ","train",1],
+["地下鉄","ちかてつ","subway",1],
+["バス","バス","bus",1],
+["タクシー","タクシー","taxi",1],
+["自転車","じてんしゃ","bicycle",1],
+["車","くるま","car",1],
+["自動車","じどうしゃ","automobile",1],
+["飛行機","ひこうき","airplane",1],
+["船","ふね","ship; boat",1],
+["切符","きっぷ","ticket",1],
+["空港","くうこう","airport",1],
+["バス停","バスてい","bus stop",1],
+["駐車場","ちゅうしゃじょう","parking lot",1],
+["地図","ちず","map",1],
+["交差点","こうさてん","intersection",1],
+["信号","しんごう","traffic light",1],
+["角","かど","corner",0],
+["まっすぐ","まっすぐ","straight ahead",0]
+]],
+["もの・道具", [
+["机","つくえ","desk",0],
+["椅子","いす","chair",0],
+["テーブル","テーブル","table",0],
+["ベッド","ベッド","bed",0],
+["ドア","ドア","door",1],
+["窓","まど","window",1],
+["鍵","かぎ","key",1],
+["電気","でんき","electricity; light",1],
+["電話","でんわ","telephone",1],
+["テレビ","テレビ","TV",0],
+["ラジオ","ラジオ","radio",0],
+["冷蔵庫","れいぞうこ","refrigerator",0],
+["時計","とけい","clock; watch",1],
+["傘","かさ","umbrella",1],
+["かばん","かばん","bag",1],
+["財布","さいふ","wallet",0],
+["眼鏡","めがね","glasses",1],
+["帽子","ぼうし","hat",1],
+["靴","くつ","shoes",1],
+["靴下","くつした","socks",1],
+["服","ふく","clothes",1],
+["シャツ","シャツ","shirt",1],
+["ズボン","ズボン","trousers",0],
+["スカート","スカート","skirt",0],
+["セーター","セーター","sweater",0],
+["コート","コート","coat",0],
+["ポケット","ポケット","pocket",0],
+["荷物","にもつ","luggage",1],
+["手紙","てがみ","letter",1],
+["切手","きって","stamp",1],
+["封筒","ふうとう","envelope",1],
+["はがき","はがき","postcard",1],
+["新聞","しんぶん","newspaper",1],
+["雑誌","ざっし","magazine",1],
+["本","ほん","book",1],
+["辞書","じしょ","dictionary",1],
+["ノート","ノート","notebook",1],
+["鉛筆","えんぴつ","pencil",1],
+["ペン","ペン","pen",1],
+["紙","かみ","paper",0],
+["写真","しゃしん","photo",1],
+["カメラ","カメラ","camera",1],
+["薬","くすり","medicine",1],
+["お金","おかね","money",1],
+["石鹸","せっけん","soap",0],
+["箱","はこ","box",1],
+["お土産","おみやげ","souvenir",1]
+]],
+["体", [
+["頭","あたま","head",0],
+["顔","かお","face",0],
+["目","め","eye",1],
+["耳","みみ","ear",1],
+["鼻","はな","nose",0],
+["口","くち","mouth",1],
+["歯","は","tooth",1],
+["手","て","hand",1],
+["足","あし","foot; leg",1],
+["体","からだ","body",0],
+["お腹","おなか","stomach",0],
+["声","こえ","voice",0],
+["背","せ","height; back",0]
+]],
+["自然・天気・生き物", [
+["天気","てんき","weather",1],
+["晴れ","はれ","sunny",0],
+["曇り","くもり","cloudy",0],
+["雨","あめ","rain",1],
+["雪","ゆき","snow",1],
+["風","かぜ","wind",0],
+["空","そら","sky",1],
+["山","やま","mountain",1],
+["川","かわ","river",1],
+["海","うみ","sea",1],
+["池","いけ","pond",1],
+["木","き","tree",1],
+["花","はな","flower",1],
+["犬","いぬ","dog",1],
+["猫","ねこ","cat",1],
+["鳥","とり","bird",1],
+["動物","どうぶつ","animal",1],
+["春","はる","spring",1],
+["夏","なつ","summer",1],
+["秋","あき","autumn",1],
+["冬","ふゆ","winter",1]
+]],
+["色", [
+["色","いろ","color",0],
+["赤","あか","red",1],
+["青","あお","blue",1],
+["白","しろ","white",1],
+["黒","くろ","black",1],
+["茶色","ちゃいろ","brown",0],
+["黄色","きいろ","yellow",1],
+["緑","みどり","green",1]
+]],
+["動詞", [
+["会う","あう","to meet",0],
+["開ける","あける","to open",0],
+["遊ぶ","あそぶ","to play",0],
+["浴びる","あびる","to take (a shower)",0],
+["洗う","あらう","to wash",0],
+["ある","ある","to exist (things)",0],
+["歩く","あるく","to walk",0],
+["言う","いう","to say",0],
+["行く","いく","to go",0],
+["いる","いる","to exist (people)",0],
+["入れる","いれる","to put in",0],
+["歌う","うたう","to sing",0],
+["生まれる","うまれる","to be born",0],
+["売る","うる","to sell",1],
+["起きる","おきる","to get up",0],
+["置く","おく","to put",0],
+["教える","おしえる","to teach",0],
+["押す","おす","to push",1],
+["覚える","おぼえる","to memorize",0],
+["泳ぐ","およぐ","to swim",0],
+["降りる","おりる","to get off",0],
+["終わる","おわる","to end",0],
+["買う","かう","to buy",1],
+["返す","かえす","to return (something)",0],
+["帰る","かえる","to go home",0],
+["かかる","かかる","to take (time/money)",0],
+["書く","かく","to write",0],
+["貸す","かす","to lend",1],
+["借りる","かりる","to borrow",0],
+["消す","けす","to turn off; erase",0],
+["聞く","きく","to listen; ask",0],
+["切る","きる","to cut",0],
+["着る","きる","to wear",0],
+["来る","くる","to come",0],
+["答える","こたえる","to answer",0],
+["困る","こまる","to be troubled",0],
+["咲く","さく","to bloom",0],
+["死ぬ","しぬ","to die",0],
+["閉まる","しまる","to close (intr.)",0],
+["閉める","しめる","to close (tr.)",0],
+["知る","しる","to know",0],
+["吸う","すう","to smoke; inhale",0],
+["住む","すむ","to live (reside)",0],
+["する","する","to do",0],
+["座る","すわる","to sit",0],
+["出す","だす","to take out; submit",0],
+["立つ","たつ","to stand",0],
+["食べる","たべる","to eat",0],
+["使う","つかう","to use",0],
+["疲れる","つかれる","to get tired",0],
+["着く","つく","to arrive",0],
+["作る","つくる","to make",0],
+["つける","つける","to turn on",0],
+["勤める","つとめる","to work for",0],
+["出かける","でかける","to go out",0],
+["できる","できる","to be able to",0],
+["出る","でる","to leave; exit",0],
+["飛ぶ","とぶ","to fly",0],
+["止まる","とまる","to stop",1],
+["撮る","とる","to take (photos)",0],
+["取る","とる","to take",0],
+["泣く","なく","to cry",0],
+["習う","ならう","to learn",0],
+["並ぶ","ならぶ","to line up",1],
+["なる","なる","to become",0],
+["脱ぐ","ぬぐ","to take off (clothes)",0],
+["寝る","ねる","to sleep",0],
+["登る","のぼる","to climb",0],
+["飲む","のむ","to drink",0],
+["乗る","のる","to ride",0],
+["入る","はいる","to enter",0],
+["履く","はく","to wear (shoes)",0],
+["始まる","はじまる","to begin",0],
+["走る","はしる","to run",0],
+["働く","はたらく","to work",0],
+["話す","はなす","to speak",0],
+["晴れる","はれる","to clear up",0],
+["引く","ひく","to pull",1],
+["弾く","ひく","to play (instrument)",0],
+["吹く","ふく","to blow",0],
+["降る","ふる","to fall (rain/snow)",0],
+["曲がる","まがる","to turn",0],
+["待つ","まつ","to wait",1],
+["磨く","みがく","to brush; polish",0],
+["見る","みる","to see",0],
+["見せる","みせる","to show",0],
+["持つ","もつ","to hold; have",0],
+["休む","やすむ","to rest",0],
+["呼ぶ","よぶ","to call",0],
+["読む","よむ","to read",0],
+["分かる","わかる","to understand",0],
+["忘れる","わすれる","to forget",1],
+["渡る","わたる","to cross",0],
+["渡す","わたす","to hand over",0]
+]],
+["い形容詞", [
+["新しい","あたらしい","new",1],
+["古い","ふるい","old (things)",1],
+["暑い","あつい","hot (weather)",0],
+["熱い","あつい","hot (things)",1],
+["寒い","さむい","cold (weather)",0],
+["冷たい","つめたい","cold (things)",1],
+["暖かい","あたたかい","warm",1],
+["涼しい","すずしい","cool",0],
+["大きい","おおきい","big",0],
+["小さい","ちいさい","small",0],
+["高い","たかい","expensive; tall",1],
+["安い","やすい","cheap",1],
+["低い","ひくい","low",0],
+["長い","ながい","long",0],
+["短い","みじかい","short",0],
+["広い","ひろい","spacious",1],
+["狭い","せまい","narrow",0],
+["早い","はやい","early",0],
+["速い","はやい","fast",1],
+["遅い","おそい","late; slow",0],
+["近い","ちかい","near",1],
+["遠い","とおい","far",0],
+["強い","つよい","strong",0],
+["弱い","よわい","weak",0],
+["重い","おもい","heavy",0],
+["軽い","かるい","light (weight)",0],
+["明るい","あかるい","bright",0],
+["暗い","くらい","dark",0],
+["良い","いい・よい","good",0],
+["悪い","わるい","bad",0],
+["おいしい","おいしい","delicious",1],
+["まずい","まずい","bad-tasting",0],
+["甘い","あまい","sweet",1],
+["辛い","からい","spicy",1],
+["忙しい","いそがしい","busy",0],
+["楽しい","たのしい","fun",0],
+["面白い","おもしろい","interesting",0],
+["つまらない","つまらない","boring",0],
+["難しい","むずかしい","difficult",0],
+["易しい","やさしい","easy",0],
+["若い","わかい","young",0],
+["汚い","きたない","dirty",0],
+["痛い","いたい","painful",0],
+["多い","おおい","many",0],
+["少ない","すくない","few",0],
+["危ない","あぶない","dangerous",1],
+["かわいい","かわいい","cute",1]
+]],
+["な形容詞", [
+["きれい","きれい","pretty; clean",0],
+["元気","げんき","healthy; energetic",1],
+["静か","しずか","quiet",1],
+["にぎやか","にぎやか","lively",0],
+["有名","ゆうめい","famous",1],
+["親切","しんせつ","kind",0],
+["便利","べんり","convenient",1],
+["好き","すき","liked; favorite",0],
+["嫌い","きらい","disliked",0],
+["上手","じょうず","good at",0],
+["下手","へた","bad at",0],
+["大丈夫","だいじょうぶ","all right",0],
+["大切","たいせつ","important",1],
+["暇","ひま","free (time)",0],
+["大変","たいへん","tough; serious",0],
+["同じ","おなじ","same",0],
+["いろいろ","いろいろ","various",0]
+]],
+["こそあど・疑問詞", [
+["これ / それ / あれ / どれ","これ…","this / that / that over there / which",0],
+["ここ / そこ / あそこ / どこ","ここ…","here / there / over there / where",0],
+["この / その / あの / どの","この…","this ~ / that ~ / that ~ / which ~",0],
+["こちら / そちら / あちら / どちら","こちら…","this way / that way (polite)",1],
+["何","なに・なん","what",0],
+["誰","だれ","who",0],
+["どう","どう","how",0],
+["どうして","どうして","why",0],
+["いくら","いくら","how much",1],
+["いくつ","いくつ","how many; how old",0]
+]],
+["あいさつ・決まり文句", [
+["おはようございます","おはようございます","good morning",0],
+["こんにちは","こんにちは","hello",0],
+["こんばんは","こんばんは","good evening",0],
+["さようなら","さようなら","goodbye",0],
+["おやすみなさい","おやすみなさい","good night",0],
+["ありがとうございます","ありがとうございます","thank you",1],
+["すみません","すみません","excuse me; sorry",0],
+["ごめんなさい","ごめんなさい","I'm sorry",0],
+["いただきます","いただきます","(before eating)",0],
+["ごちそうさまでした","ごちそうさまでした","(after eating)",0],
+["いらっしゃいませ","いらっしゃいませ","welcome (to a shop)",1],
+["お願いします","おねがいします","please",1],
+["はじめまして","はじめまして","nice to meet you",0],
+["どうぞ","どうぞ","here you are; please",1],
+["どうも","どうも","thanks",0]
+]]
+];
+
+/* ============ 状態 ============ */
+const memStore = {};
+const store = {
+  read() {
+    try { return JSON.parse(localStorage.getItem("ngy-n5-checks") || "{}"); }
+    catch (e) { return memStore; }
+  },
+  write(obj) {
+    try { localStorage.setItem("ngy-n5-checks", JSON.stringify(obj)); }
+    catch (e) { Object.assign(memStore, obj); }
+  }
+};
+let checks = store.read();
+let activeTab = "kanji";
+let statusFilter = "all";
+let activeCat = "all";
+let query = "";
+
+/* ============ ID ============ */
+const kanjiItems = KANJI.map((k, i) => ({ id: "k" + i, char: k[0], reading: k[1], en: k[2], hint: k[3] }));
+const vocabItems = [];
+VOCAB.forEach(([cat, words], ci) => {
+  words.forEach((w, wi) => {
+    vocabItems.push({ id: "v" + ci + "-" + wi, cat, word: w[0], reading: w[1], en: w[2], cam: w[3] === 1 });
+  });
+});
+const vocabCats = VOCAB.map(v => v[0]);
+
+/* ============ 描画 ============ */
+const $ = (s) => document.querySelector(s);
+const kanjiGrid = $("#kanjiGrid");
+const vocabList = $("#vocabList");
+const catBar = $("#catBar");
+
+function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+function matches(item, isKanji) {
+  const q = query.trim().toLowerCase();
+  if (q) {
+    const hay = isKanji
+      ? (item.char + item.reading + item.en + item.hint).toLowerCase()
+      : (item.word + item.reading + item.en).toLowerCase();
+    if (!hay.includes(q)) return false;
+  }
+  const done = !!checks[item.id];
+  if (statusFilter === "done" && !done) return false;
+  if (statusFilter === "todo" && done) return false;
+  return true;
+}
+
+function renderKanji() {
+  const shown = kanjiItems.filter(k => matches(k, true));
+  kanjiGrid.innerHTML = shown.map(k => `
+    <article class="kanji-card">
+      <div class="kanji-faces" aria-hidden="true">
+        <span class="face-main">${esc(k.char)}</span>
+        <span class="face-alts"><span class="face-go">${esc(k.char)}</span><span class="face-hand">${esc(k.char)}</span></span>
+      </div>
+      <div class="kanji-body">
+        <p class="kanji-reading">${esc(k.reading)}</p>
+        <p class="kanji-meaning">${esc(k.en)}</p>
+        <p class="kanji-hint">${esc(k.hint)}</p>
+      </div>
+      <div class="check-wrap">
+        <input type="checkbox" class="check" data-id="${k.id}" ${checks[k.id] ? "checked" : ""} aria-label="${esc(k.char)} を撮影済みにする">
+      </div>
+    </article>`).join("");
+  $("#kanjiEmpty").style.display = shown.length ? "none" : "block";
+  $("#kanjiShown").textContent = shown.length + "字を表示";
+}
+
+function renderVocab() {
+  let total = 0;
+  vocabList.innerHTML = vocabCats
+    .filter(cat => activeCat === "all" || cat === activeCat)
+    .map(cat => {
+      const rows = vocabItems.filter(v => v.cat === cat && matches(v, false));
+      if (!rows.length) return "";
+      total += rows.length;
+      return `
+      <section class="vocab-cat">
+        <div class="vocab-cat-head"><h3>${esc(cat)}</h3><span class="n">${rows.length}語</span></div>
+        <div class="vocab-rows">
+          ${rows.map(v => `
+          <div class="vocab-row">
+            <div class="vocab-main">
+              <p class="vocab-word">${esc(v.word)}${v.cam ? '<span class="cam" title="街で撮れる">📷</span>' : ""}</p>
+              <p class="vocab-sub">${esc(v.reading)}<span class="en">${esc(v.en)}</span></p>
+            </div>
+            <input type="checkbox" class="check" data-id="${v.id}" ${checks[v.id] ? "checked" : ""} aria-label="${esc(v.word)} を撮影済みにする">
+          </div>`).join("")}
+        </div>
+      </section>`;
+    }).join("");
+  $("#vocabEmpty").style.display = total ? "none" : "block";
+}
+
+function renderProgress() {
+  const pool = activeTab === "kanji" ? kanjiItems : vocabItems;
+  const done = pool.filter(i => checks[i.id]).length;
+  $("#doneCount").textContent = done;
+  $("#totalCount").textContent = pool.length;
+  $("#barFill").style.width = (pool.length ? (done / pool.length) * 100 : 0) + "%";
+  $("#progressLabel").textContent = (activeTab === "kanji" ? "漢字" : "語彙") + " 撮影済み";
+}
+
+function renderAll() {
+  if (activeTab === "kanji") renderKanji(); else renderVocab();
+  renderProgress();
+}
+
+/* ============ イベント ============ */
+document.addEventListener("change", (e) => {
+  if (!e.target.classList.contains("check")) return;
+  const id = e.target.dataset.id;
+  if (e.target.checked) checks[id] = 1; else delete checks[id];
+  store.write(checks);
+  renderProgress();
+});
+
+$("#tabKanji").addEventListener("click", () => switchTab("kanji"));
+$("#tabVocab").addEventListener("click", () => switchTab("vocab"));
+
+function switchTab(tab) {
+  activeTab = tab;
+  $("#tabKanji").setAttribute("aria-selected", tab === "kanji");
+  $("#tabVocab").setAttribute("aria-selected", tab === "vocab");
+  $("#panelKanji").classList.toggle("hidden", tab !== "kanji");
+  $("#panelVocab").classList.toggle("hidden", tab !== "vocab");
+  catBar.classList.toggle("hidden", tab !== "vocab");
+  renderAll();
+}
+
+document.querySelectorAll(".filters .chip").forEach(btn => {
+  btn.addEventListener("click", () => {
+    statusFilter = btn.dataset.filter;
+    document.querySelectorAll(".filters .chip").forEach(b => b.setAttribute("aria-pressed", b === btn));
+    renderAll();
+  });
+});
+
+let debounce;
+$("#searchBox").addEventListener("input", (e) => {
+  clearTimeout(debounce);
+  debounce = setTimeout(() => { query = e.target.value; renderAll(); }, 120);
+});
+
+$("#resetBtn").addEventListener("click", () => {
+  if (!confirm("すべてのチェックをリセットしますか?")) return;
+  checks = {};
+  store.write(checks);
+  renderAll();
+});
+
+/* カテゴリーチップ */
+catBar.innerHTML = ['<button class="chip" data-cat="all" aria-pressed="true">全カテゴリー</button>']
+  .concat(vocabCats.map(c => `<button class="chip" data-cat="${esc(c)}" aria-pressed="false">${esc(c)}</button>`)).join("");
+catBar.querySelectorAll(".chip").forEach(btn => {
+  btn.addEventListener("click", () => {
+    activeCat = btn.dataset.cat;
+    catBar.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", b === btn));
+    renderVocab();
+  });
+});
+
+/* タブの件数 */
+$("#kanjiTabCount").textContent = kanjiItems.length;
+$("#vocabTabCount").textContent = vocabItems.length;
+
+renderAll();
+</script>
+</body>
+</html>
