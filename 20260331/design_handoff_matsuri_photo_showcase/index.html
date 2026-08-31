@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#f5f1ea" />
+<title>祭 — MATSURI / 写真が主役になるWebメディア</title>
+<meta name="description" content="東京の夏祭りを題材に、Webメディアにおける写真の見せ方13パターンを体験するデモページ。" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&family=Noto+Serif+JP:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Fixed UI -->
+<div class="progress" aria-hidden="true"><div class="progress__bar"></div></div>
+<div class="counter" aria-live="polite">
+  <b>01</b><em>/</em><span>#01 hero</span>
+</div>
+
+<!-- ================================================
+     #01 HERO
+     ================================================ -->
+<section class="hero" data-idx="1" data-name="#01 hero" data-screen-label="01 Hero">
+  <div class="hero__img" style="background-image:url('assets/01_hero_lanterns.jpg')"></div>
+  <div class="hero__vignette"></div>
+  <div class="hero__content">
+    <div class="hero__top">
+      <div class="hero__mark">祭 &nbsp; MATSURI</div>
+      <div class="hero__meta">
+        Photo Story No.001<br>
+        Tokyo, Summer 2026<br>
+        Pattern Index &nbsp; 13
+      </div>
+    </div>
+    <div>
+      <h1 class="hero__title">
+        写真が主役になる<br><span class="thin">Webメディア。</span>
+      </h1>
+      <p class="hero__sub">東京の夏祭りを題材に、写真の見せ方を試すデモページ。同じ被写体でも、余白・順番・重ね方が変わると、印象はここまで変わる。</p>
+    </div>
+    <div class="hero__bottom">
+      <div class="hero__scroll">Scroll to enter</div>
+      <div class="hero__meta">
+        13 Patterns<br>
+        19 Photographs<br>
+        1 Long Read
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     #02 INTRO
+     ================================================ -->
+<section class="intro" data-idx="2" data-name="#02 intro">
+  <div class="wrap-narrow reveal">
+    <div class="intro__kicker">Editor's note &nbsp;— &nbsp;このページについて</div>
+    <div class="intro__body">
+      <p>写真は、記事に添えるための「挿絵」ではありません。<br><em>写真そのものが、物語を運ぶ主役になれる。</em></p>
+      <p>このページは、東京の下町で行われた架空の夏祭りを取材した一連の写真を、Webメディアで用いられる代表的な13の見せ方で並べ替えた実験です。同じ夜、同じ人々の、同じ光景。ただ、レイアウトが違うだけで、受け取る印象がどう変わるのか。スクロールしながら確かめてください。</p>
+    </div>
+    <div class="intro__foot">
+      <span>Photographer &nbsp; — &nbsp; AI Generated</span>
+      <span>Text &nbsp; — &nbsp; Editorial team</span>
+      <span>Read time &nbsp; — &nbsp; 約 6 分</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     #03 FULL WIDTH
+     ================================================ -->
+<section class="fullwidth" data-idx="3" data-name="#03 全幅で見せる">
+  <div class="reveal">
+    <img class="fullwidth__img" src="assets/02_bonodori_wide.jpg" alt="盆踊りの様子" />
+    <div class="wrap">
+      <div class="fullwidth__foot">
+        <span class="pattern-tag"><span class="num">#03</span> Full-bleed &nbsp;/ &nbsp;全幅で見せる</span>
+        <p class="fullwidth__cap">櫓（やぐら）を囲んで踊り手の腕が一斉に上がる瞬間。全幅で置くことで、画面の外にまで続くリズムを想像させる。</p>
+        <span class="fullwidth__num">Frame 02 / 19</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     #04 EXHIBITION-STYLE WHITESPACE
+     ================================================ -->
+<section class="exhibit" data-idx="4" data-name="#04 余白で見せる">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="pattern-tag"><span class="num">#04</span> Whitespace / 展示型</span>
+      <h2 class="section-title">余白を、額縁のように使う。</h2>
+      <p class="section-lead">画像の周りに広い呼吸を取ると、写真は「情報」から「作品」に変わる。目の動きが遅くなり、一枚ずつが記憶に残る。</p>
+    </div>
+
+    <div class="exhibit__row reveal">
+      <figure class="exhibit__frame" data-lb="assets/03_yukata_portrait.jpg" data-cap="日暮れ、路地の入口で。うちわを持つ手だけが、まだ夕方の色をしていた。">
+        <img src="assets/03_yukata_portrait.jpg" alt="浴衣の女性" />
+        <div class="exhibit__meta">
+          <span>PLATE Ⅰ</span>
+          <span>PORTRAIT · DUSK</span>
+        </div>
+        <figcaption class="exhibit__cap">日暮れ、路地の入口で。うちわを持つ手だけが、まだ夕方の色をしていた。</figcaption>
+      </figure>
+    </div>
+
+    <div class="exhibit__row exhibit__row--right reveal">
+      <figure class="exhibit__frame" data-lb="assets/07_lantern_single.jpg" data-cap="提灯の内側から漏れる灯りは、和紙の繊維の一本一本を数えられるほど正直だ。">
+        <img src="assets/07_lantern_single.jpg" alt="提灯" />
+        <div class="exhibit__meta">
+          <span>PLATE Ⅱ</span>
+          <span>STILL · NIGHT</span>
+        </div>
+        <figcaption class="exhibit__cap">提灯の内側から漏れる灯りは、和紙の繊維の一本一本を数えられるほど正直だ。</figcaption>
+      </figure>
+    </div>
+
+    <div class="exhibit__row reveal">
+      <figure class="exhibit__frame" data-lb="assets/18_bridge_silhouette.jpg" data-cap="橋の上で立ち止まる人がいた。祭りの音は、水面の上を渡って聞こえてくる。">
+        <img src="assets/18_bridge_silhouette.jpg" alt="橋の上の人" />
+        <div class="exhibit__meta">
+          <span>PLATE Ⅲ</span>
+          <span>SCENE · DUSK</span>
+        </div>
+        <figcaption class="exhibit__cap">橋の上で立ち止まる人がいた。祭りの音は、水面の上を渡って聞こえてくる。</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     #05 EDITORIAL TWO-COLUMN
+     ================================================ -->
+<section class="editorial" data-idx="5" data-name="#05 編集レイアウト">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="pattern-tag"><span class="num">#05</span> Editorial / 2カラム</span>
+      <h2 class="section-title">文章と写真が、並走する。</h2>
+      <p class="section-lead">読み物としての強度が求められる特集記事では、写真は文章と並んで、時にリズムを取り、時にペースを崩す役割を担う。</p>
+    </div>
+
+    <div class="editorial__grid">
+      <div class="editorial__col--sticky reveal">
+        <img src="assets/11_taiko_drummer.jpg" alt="太鼓の打ち手" />
+        <p class="caption" style="margin-top:12px">太鼓の打ち手・山本さん（32）。夕方の稽古で、まだ照明も入っていない。</p>
+        <p class="caption--credit">FIGURE 01 · REHEARSAL</p>
+      </div>
+
+      <div class="editorial__body reveal">
+        <p>午後五時。神社の裏手で、太鼓の稽古が始まった。境内はまだ明るく、白い光の中で、皮の音だけが妙にはっきりと聞こえていた。</p>
+        <p>「本番になると、この音、たぶん聞こえないんですよ」と山本さんは笑った。祭りの夜には、あらゆる音が重なる。囃子（はやし）、拍手、掛け声、下駄の音。だからこそ、稽古では一音一音を丁寧に置いていく。</p>
+
+        <div class="editorial__inset">
+          <img src="assets/04_yatai_steam.jpg" alt="屋台の湯気" data-lb="assets/04_yatai_steam.jpg" data-cap="屋台の湯気。写真は嗅覚も運ぶことができる。" />
+          <p class="caption">屋台に灯が入るのは、日が完全に落ちてから。湯気だけが先に立ちのぼる。</p>
+        </div>
+
+        <h3>光が入れ替わる、その十五分。</h3>
+        <p>夕方から夜への移行はとても短い。空が青からオレンジ、そして紺色へと変わる十五分ほどの時間に、この街の色は完全に別のものになる。提灯の光が、街灯や太陽ではなく主役になる。</p>
+        <p>写真家はこの時間を「マジックアワー」と呼ぶが、祭りの現場ではむしろ、この後に来る本当の夜こそが主役だ。人の輪郭が溶け、代わりに色と音が立ち上がる。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     #06 PHOTO STORY (Montage)
+     ================================================ -->
+<section class="story" data-idx="6" data-name="#06 フォトストーリー">
+  <div class="wrap">
+    <div class="sec-head reveal story__head">
+      <span class="pattern-tag"><span class="num">#06</span> Photo Story / モンタージュ</span>
+      <h2 class="section-title">文字を、ほとんど、置かない。</h2>
+      <p class="section-lead">写真だけを連続で並べると、モンタージュとして時間が流れ始める。一言のキャプションだけで、読者は自分のなかで物語を組み立てていく。</p>
+    </div>
+
+    <div class="story__strip">
+      <div class="story__frame story__frame--sm reveal">
+        <div class="story__num">01</div>
+        <img src="assets/12_elder_woman.jpg" alt="おばあさん" data-lb="assets/12_elder_woman.jpg" data-cap="「今年で、七十二回目」" />
+        <p class="story__cap">「今年で、七十二回目」</p>
+      </div>
+
+      <div class="story__frame story__frame--md reveal">
+        <div class="story__num">02</div>
+        <img src="assets/14_mikoshi.jpg" alt="神輿" data-lb="assets/14_mikoshi.jpg" data-cap="通りを、ひっくり返す。" />
+        <p class="story__cap">通りを、ひっくり返す。</p>
+      </div>
+
+      <div class="story__frame story__frame--left reveal">
+        <div class="story__num">03</div>
+        <img src="assets/13_child_candy.jpg" alt="子どもとりんご飴" data-lb="assets/13_child_candy.jpg" data-cap="りんご飴に、月が映る。" />
+        <p class="story__cap">りんご飴に、月が映る。</p>
+      </div>
+
+      <div class="story__frame story__frame--lg reveal">
+        <div class="story__num">04</div>
+        <img src="assets/15_couple_back.jpg" alt="浴衣の二人" data-lb="assets/15_couple_back.jpg" data-cap="帰りぎわの、無言の会話。" />
+        <p class="story__cap">帰りぎわの、無言の会話。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     #07 GRID GALLERY + LIGHTBOX (#08)
+     ================================================ -->
+<section class="grid" data-idx="7" data-name="#07 グリッド / #08 ライトボックス">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="pattern-tag"><span class="num">#07 · #08</span> Grid Gallery + Lightbox</span>
+      <h2 class="section-title">ディテールを、まとめて見せる。</h2>
+      <p class="section-lead">全体を撮った一枚では伝わらない、細部の記憶。サイズに変化のあるグリッドに並べ、クリックで拡大表示（ライトボックス）へ。</p>
+    </div>
+
+    <div class="grid__wrap reveal">
+      <div class="grid__cell g-a" data-num="D-01" data-lb="assets/06_uchiwa_hand.jpg" data-cap="うちわを握る手。夕暮れの色が指先に残っている。">
+        <img src="assets/06_uchiwa_hand.jpg" alt="うちわを持つ手" />
+      </div>
+      <div class="grid__cell g-b" data-num="D-02" data-lb="assets/05_geta_feet.jpg" data-cap="石畳に下駄の音が跳ねる。">
+        <img src="assets/05_geta_feet.jpg" alt="下駄の足元" />
+      </div>
+      <div class="grid__cell g-c" data-num="D-03" data-lb="assets/08_obi_detail.jpg" data-cap="帯の結び目にも、その人の朝の時間が畳まれている。">
+        <img src="assets/08_obi_detail.jpg" alt="帯" />
+      </div>
+      <div class="grid__cell g-d" data-num="D-04" data-lb="assets/16_goldfish.jpg" data-cap="金魚すくいの水面が、提灯を映す。">
+        <img src="assets/16_goldfish.jpg" alt="金魚すくい" />
+      </div>
+      <div class="grid__cell g-e" data-num="D-05" data-lb="assets/07_lantern_single.jpg" data-cap="提灯、単体。">
+        <img src="assets/07_lantern_single.jpg" alt="提灯" />
+      </div>
+      <div class="grid__cell g-f" data-num="D-06" data-lb="assets/19_flute_player.jpg" data-cap="篠笛の音は、遠くまで届く。">
+        <img src="assets/19_flute_player.jpg" alt="篠笛" />
+      </div>
+      <div class="grid__cell g-g" data-num="D-07" data-lb="assets/18_bridge_silhouette.jpg" data-cap="橋の上の、一人ぶんの静けさ。">
+        <img src="assets/18_bridge_silhouette.jpg" alt="橋の上のシルエット" />
+      </div>
+    </div>
+    <p class="caption" style="margin-top:20px;max-width:56ch">写真をクリック（タップ）すると拡大表示されます。&nbsp; <span class="caption--credit" style="display:inline;margin:0">ESC / ← → で操作可能</span></p>
+  </div>
+</section>
+
+<!-- ================================================
+     #09 BEFORE / AFTER
+     ================================================ -->
+<section class="ba" data-idx="8" data-name="#09 Before / After">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="pattern-tag"><span class="num">#09</span> Before / After</span>
+      <h2 class="section-title">同じ場所を、二度、見せる。</h2>
+      <p class="section-lead">日没前の準備中と、夜のいちばん賑やかな時間。同じ通り、同じ画角。中央のハンドルを左右に動かして、光が変えるものを確かめてください。</p>
+    </div>
+
+    <div class="ba__slider reveal" aria-label="Before / After スライダー">
+      <img class="ba__img" src="assets/09_street_day.jpg" alt="日没前" />
+      <div class="ba__after">
+        <img class="ba__img" src="assets/10_street_night.jpg" alt="夜" />
+      </div>
+      <span class="ba__label ba__label--l">17 : 24</span>
+      <span class="ba__label ba__label--r">20 : 41</span>
+      <div class="ba__handle"></div>
+      <div class="ba__grip" aria-hidden="true"></div>
+    </div>
+    <p class="caption" style="margin-top:16px;max-width:60ch">同じ光景でも、光の量が変わるだけで街の主役は入れ替わる。昼は建物、夜は提灯。</p>
+  </div>
+</section>
+
+<!-- ================================================
+     #10 HOTSPOTS
+     ================================================ -->
+<section class="hotspot" data-idx="9" data-name="#10 ホットスポット">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="pattern-tag"><span class="num">#10</span> Hotspots / 写真を読む</span>
+      <h2 class="section-title">一枚の写真の中に、幾つもの入口を置く。</h2>
+      <p class="section-lead">写真は「見る」ものであり、同時に「読む」ものでもある。ポイントをタップすると、その部分についての小さな解説が右側に開きます。</p>
+    </div>
+
+    <div class="hotspot__grid reveal">
+      <div class="hotspot__stage">
+        <img class="hotspot__img" src="assets/11_taiko_drummer.jpg" alt="太鼓の打ち手" />
+        <button class="hotspot__pt is-active" data-pt="a" style="top:14%;left:52%" aria-label="提灯"></button>
+        <button class="hotspot__pt" data-pt="b" style="top:44%;left:38%" aria-label="法被"></button>
+        <button class="hotspot__pt" data-pt="c" style="top:32%;left:70%" aria-label="手の形"></button>
+        <button class="hotspot__pt" data-pt="d" style="top:82%;left:44%" aria-label="足元"></button>
+        <button class="hotspot__pt" data-pt="e" style="top:66%;left:22%" aria-label="屋台"></button>
+      </div>
+      <div class="hotspot__side">
+        <div class="hotspot__panel">
+          <h3>提灯</h3>
+          <p>この祭りの空気を最も強く支配しているのは、頭上に連なる提灯の温かい光です。夜が近づくにつれて内側から灯りが漏れ、和紙の繊維までもがオレンジに透ける。</p>
+          <div class="hint">Detail — A of 5</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     #11 HORIZONTAL SCROLL
+     ================================================ -->
+<section class="hscroll" data-idx="10" data-name="#11 横スクロール">
+  <div class="wrap">
+    <div class="sec-head reveal hscroll__head">
+      <span class="pattern-tag"><span class="num">#11</span> Horizontal Scroll</span>
+      <h2 class="section-title">縦のスクロールを、一度、横に折る。</h2>
+      <p class="section-lead">スマートフォンの画面上で、指の向きを変えるだけで、写真の連なりは「行列」から「行進」に変わる。ゆっくり指をすべらせてみてください。</p>
+    </div>
+  </div>
+
+  <div class="hscroll__track reveal">
+    <div class="hscroll__card">
+      <img src="assets/03_yukata_portrait.jpg" alt="浴衣の女性" data-lb="assets/03_yukata_portrait.jpg" data-cap="まず、はじめに。" />
+      <p class="caption">01 &nbsp;/&nbsp; まず、はじめに。</p>
+    </div>
+    <div class="hscroll__card">
+      <img src="assets/19_flute_player.jpg" alt="篠笛" data-lb="assets/19_flute_player.jpg" data-cap="音が、路地を先に走っていく。" />
+      <p class="caption">02 &nbsp;/&nbsp; 音が、路地を先に走っていく。</p>
+    </div>
+    <div class="hscroll__card">
+      <img src="assets/11_taiko_drummer.jpg" alt="太鼓" data-lb="assets/11_taiko_drummer.jpg" data-cap="打ち手の背中。" />
+      <p class="caption">03 &nbsp;/&nbsp; 打ち手の背中。</p>
+    </div>
+    <div class="hscroll__card">
+      <img src="assets/12_elder_woman.jpg" alt="おばあさん" data-lb="assets/12_elder_woman.jpg" data-cap="七十二回目の、うちわの角度。" />
+      <p class="caption">04 &nbsp;/&nbsp; 七十二回目の、うちわの角度。</p>
+    </div>
+    <div class="hscroll__card">
+      <img src="assets/13_child_candy.jpg" alt="子ども" data-lb="assets/13_child_candy.jpg" data-cap="はじめての、りんご飴。" />
+      <p class="caption">05 &nbsp;/&nbsp; はじめての、りんご飴。</p>
+    </div>
+    <div class="hscroll__card">
+      <img src="assets/18_bridge_silhouette.jpg" alt="橋" data-lb="assets/18_bridge_silhouette.jpg" data-cap="そして、静かな橋の上。" />
+      <p class="caption">06 &nbsp;/&nbsp; そして、静かな橋の上。</p>
+    </div>
+  </div>
+
+  <div class="hscroll__hint">
+    <svg viewBox="0 0 20 8" fill="none"><path d="M0 4h18M14 1l4 3-4 3" stroke="currentColor" stroke-width="1"/></svg>
+    <span>Swipe / Scroll →</span>
+  </div>
+</section>
+
+<!-- ================================================
+     #12 EXHIBITION VIEW (wall)
+     ================================================ -->
+<section class="wall" data-idx="11" data-name="#12 Exhibition View">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="pattern-tag"><span class="num">#12</span> Exhibition View / オンライン写真展</span>
+      <h2 class="section-title">Webを、壁面に見立てる。</h2>
+      <p class="section-lead">サイズと配置に意図的な差をつけると、スクリーンの中に「展示空間」が立ち上がる。プレートを添えれば、それは仮設の写真展になる。</p>
+    </div>
+  </div>
+
+  <div class="wall__scene reveal">
+    <div class="wall__grid">
+      <figure class="wall__piece wall--a" data-lb="assets/17_fireworks.jpg" data-cap="No. 07 — 花火は建物の間で、街の高さまで下りてくる。">
+        <img src="assets/17_fireworks.jpg" alt="花火" />
+        <figcaption class="plaque">
+          <b>No. 07 &nbsp; 花火、屋根越し</b>
+          Tokyo / 20 : 47 / 35mm
+        </figcaption>
+      </figure>
+      <figure class="wall__piece wall--b" data-lb="assets/03_yukata_portrait.jpg" data-cap="No. 08 — 誰かを待っている。">
+        <img src="assets/03_yukata_portrait.jpg" alt="浴衣の女性" />
+        <figcaption class="plaque">
+          <b>No. 08 &nbsp; 待ち人</b>
+          Tokyo / 18 : 12 / 50mm
+        </figcaption>
+      </figure>
+      <figure class="wall__piece wall--c" data-lb="assets/07_lantern_single.jpg" data-cap="No. 09 — 提灯、単体で。">
+        <img src="assets/07_lantern_single.jpg" alt="提灯" />
+        <figcaption class="plaque">
+          <b>No. 09 &nbsp; 一灯</b>
+          Tokyo / 21 : 03 / 85mm
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     #13 CLOSING
+     ================================================ -->
+<section class="close" data-idx="12" data-name="#13 まとめ">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="pattern-tag"><span class="num">#13</span> Recap / このページで試したこと</span>
+      <h2 class="section-title">十三の見せ方は、記事の「編集」そのものだった。</h2>
+      <p class="section-lead">通常記事・特集記事・フォトストーリー——どの媒体でも、写真の並べ方は文章と同じくらい多くを語ります。今回試したパターンを、あらためて一覧します。</p>
+    </div>
+
+    <div class="close__list reveal">
+      <div class="close__item"><span class="close__num">#01</span><span class="close__name">Hero — 全画面で導入</span><span class="close__use">Article top / LP / 特集扉</span></div>
+      <div class="close__item"><span class="close__num">#02</span><span class="close__name">Intro — 短文で、意図を宣言</span><span class="close__use">Editor's note / 前書き</span></div>
+      <div class="close__item"><span class="close__num">#03</span><span class="close__name">Full-bleed — 全幅で空気を運ぶ</span><span class="close__use">章の切り替え</span></div>
+      <div class="close__item"><span class="close__num">#04</span><span class="close__name">Whitespace — 展示型で一枚ずつ</span><span class="close__use">写真連載 / ブランド記事</span></div>
+      <div class="close__item"><span class="close__num">#05</span><span class="close__name">Editorial — 文章と2カラム並走</span><span class="close__use">特集 / インタビュー</span></div>
+      <div class="close__item"><span class="close__num">#06</span><span class="close__name">Photo Story — モンタージュ</span><span class="close__use">フォトエッセイ</span></div>
+      <div class="close__item"><span class="close__num">#07</span><span class="close__name">Grid — 詳細を並列に</span><span class="close__use">ディテール記事 / レビュー</span></div>
+      <div class="close__item"><span class="close__num">#08</span><span class="close__name">Lightbox — 拡大表示</span><span class="close__use">全形式で共通</span></div>
+      <div class="close__item"><span class="close__num">#09</span><span class="close__name">Before / After — 二度見せる</span><span class="close__use">検証・比較・ハウツー</span></div>
+      <div class="close__item"><span class="close__num">#10</span><span class="close__name">Hotspot — 写真を「読む」</span><span class="close__use">解説記事 / 教材</span></div>
+      <div class="close__item"><span class="close__num">#11</span><span class="close__name">Horizontal Scroll — 縦を横に折る</span><span class="close__use">スマホ / ストーリー</span></div>
+      <div class="close__item"><span class="close__num">#12</span><span class="close__name">Exhibition View — 壁面としてのWeb</span><span class="close__use">写真展 / 特別企画</span></div>
+      <div class="close__item"><span class="close__num">#13</span><span class="close__name">Recap — 構造を可視化して閉じる</span><span class="close__use">長尺記事の締め</span></div>
+    </div>
+
+    <div class="close__end">
+      <span class="close__mark">祭 &nbsp; MATSURI</span>
+      <span>© 2026 Editorial Demo &nbsp;— &nbsp; Photo showcase for the web</span>
+      <span>End of story</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     LIGHTBOX
+     ================================================ -->
+<div class="lb" role="dialog" aria-modal="true" aria-label="拡大表示">
+  <div class="lb__stage">
+    <button class="lb__close" aria-label="閉じる">CLOSE ×</button>
+    <button class="lb__nav lb__nav--prev" aria-label="前へ">‹</button>
+    <button class="lb__nav lb__nav--next" aria-label="次へ">›</button>
+    <img class="lb__img" src="" alt="" />
+    <div class="lb__foot">
+      <p class="lb__cap"></p>
+      <span class="lb__count">01 / 08</span>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
